@@ -107,7 +107,7 @@ const feetaMembers = [
     name: "Mr. Siddhesh Hedau",
     role: "Media Head",
     year: "2nd Year",
-    image: "/members/sidhesh.png",
+    image: "/members/sidhesh.jpg",
     linkedinId: "in/sidhesh-hedau",
     linkedinUrl: "https://linkedin.com/in/sidhesh-hedau",
   },
