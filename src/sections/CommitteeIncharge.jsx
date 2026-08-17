@@ -5,7 +5,7 @@ function CommitteeIncharge() {
     heading: "From Forum Incharge Desk",
     message:
       "At FEETA & ISF Committee, learning goes far beyond the classroom. Student technical forums play a vital role in nurturing creativity, leadership, teamwork, and technical excellence among students. They provide a dynamic platform where students can explore their interests, develop new skills in embedded systems and electronics, and engage meaningfully with the campus community.",
-    name: "Prof. Ayushi Agrawal",
+    name: "Prof. Ayushi Jaiswal",
     position: "Forum In-Charge",
     // Make sure your photo is saved inside your project's public folder (e.g., public/incharge.jpg)
     photo: "/incharge.jpg",
