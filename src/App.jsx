@@ -1,35 +1,56 @@
-import Navbar from "./components/Navbar"
-import Hero from "./sections/Hero"
-import About from "./sections/About"
-import Team from "./sections/Team"
-import Activities from "./sections/Activities"
-import Events from "./sections/Events"
-import Gallery from "./sections/Gallery"
-import Achievements from "./sections/Achievements"
-import Contact from "./sections/Contact"
-import Footer from "./sections/Footer"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Hero from "./sections/Hero";
+import About from "./sections/About";
+import CommitteeIncharge from "./sections/CommitteeIncharge";
+import Activities from "./sections/Activities";
+import Events from "./sections/Events";
+import Gallery from "./sections/Gallery";
+import Achievements from "./sections/Achievements";
+import Team from "./sections/Team";
+import Community from "./sections/Community";
+import Contact from "./sections/Contact";
+import Footer from "./sections/Footer";
+import NotFound from "./sections/NotFound";
 
 function App() {
   return (
-    <div className="min-h-screen">
-
+    <BrowserRouter>
       <Navbar />
-
-      <main>
-        <Hero />
-        <About />
-        <Team />
-        <Activities />
-        <Events />
-        <Gallery />
-        <Achievements />
-        <Contact />
-      </main>
-
+      <Routes>
+        <Route path="/" element={<Hero />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/committee-incharge" element={<CommitteeIncharge />} />
+        <Route path="/activities" element={<Activities />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/achievements" element={<Achievements />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/community" element={<Community />} />
+        <Route
+          path="/feeta"
+          element={
+            <Team
+              category="FEETA"
+              vision="To build an inclusive ecosystem driving technical innovation, student leadership, and impactful collaboration through the FEETA Student Forum."
+            />
+          }
+        />
+        <Route
+          path="/isf"
+          element={
+            <Team
+              category="ISF"
+              vision="To advance technical excellence and hands-on engineering culture among students through the ISF Technical Committee."
+            />
+          }
+        />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
       <Footer />
-
-    </div>
-  )
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
