@@ -2,28 +2,28 @@ import { useState } from "react"
 
 const events = [
   {
-    date: "25",
-    month: "SEP",
-    title: "Technical Workshop",
+    date: "20",
+    month: "AUG",
+    title: "FORUM INSTALLATION",
     description:
-      "An interactive hands-on workshop designed to introduce students to practical technologies and engineering concepts.",
-    category: "Workshop",
+      "To cultivate an innovative, student-driven community that empowers future engineers with industry-relevant skills, technical excellence, and leadership capabilities.",
+    category: "Cultural",
   },
   {
-    date: "05",
-    month: "OCT",
-    title: "Coding Challenge",
+    date: "...",
+    month: "...",
+    title: "Coming Soon",
     description:
-      "A technical coding challenge where students can test their problem-solving and programming skills.",
-    category: "Competition",
+      "Stay Tuned !!!!!!!!!!!!!!!",
+    category: "Coming..............",
   },
   {
-    date: "18",
-    month: "OCT",
-    title: "Project Exhibition",
+     date: "...",
+    month: "...",
+    title: "Coming Soon",
     description:
-      "Students showcase innovative electronics, communication, embedded and software projects.",
-    category: "Exhibition",
+      "Stay Tuned !!!!!!!!!!!!!!!",
+    category: "Coming..............",
   },
 ]
 

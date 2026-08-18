@@ -99,7 +99,7 @@ const feetaMembers = [
     name: "Mr. Sujal Jangilwar",
     role: "Media Head",
     year: "2nd Year",
-    image: "/members/sujal.png",
+    image: "/members/sujal.jpg",
     linkedinId: "in/sujal-jangilwar",
     linkedinUrl: "https://linkedin.com/in/sujal-jangilwar",
   },
