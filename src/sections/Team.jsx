@@ -284,7 +284,7 @@ const mentors = [
     year: "4th Year",
     linkedinId: "in/mentor-one",
     linkedinUrl: "https://linkedin.com/in/mentor-one",
-    image: "/members/m1.png",
+    image: "/members/m1.jpg",
   },
   {
     name: "MS. AYUSHI MANKAR",
