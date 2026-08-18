@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SplashLoader from "./components/SplashLoader";
 import Navbar from "./components/Navbar";
 import Hero from "./sections/Hero";
 import About from "./sections/About";
@@ -14,6 +16,12 @@ import Footer from "./sections/Footer";
 import NotFound from "./sections/NotFound";
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  if (loading) {
+    return <SplashLoader onFinish={() => setLoading(false)} />;
+  }
+
   return (
     <BrowserRouter>
       <Navbar />
