@@ -8,7 +8,7 @@ function CommitteeIncharge() {
     name: "Prof. Ayushi Jaiswal",
     position: "Forum In-Charge",
     // Make sure your photo is saved inside your project's public folder (e.g., public/incharge.jpg)
-    photo: "/incharge.jpg",
+    photo: "/members/incharge.jpg",
   };
 
   return (
