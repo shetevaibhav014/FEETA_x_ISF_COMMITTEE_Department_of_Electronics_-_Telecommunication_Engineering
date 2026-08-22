@@ -6,21 +6,21 @@ function Contact() {
       role: "Committee Incharge",
       name: "Prof. Ayushi Jaiswal",
       email: "ayushijaiswal@sbjit.edu.in",
-      linkedin: "https://linkedin.com/in/username",
+      linkedin: "https://www.linkedin.com/in/ayushi-jaiswal-22293737/",
       image: "/members/incharge.jpg", // Replace with actual path in public folder
     },
     {
       role: "President",
       name: "Mr. Tushar Thakare",
       email: "tusharthakare.etc24@sbjit.edu.in",
-      linkedin: "https://linkedin.com/in/username",
+      linkedin: "https://www.linkedin.com/in/tushar-thakare-a44445342/",
       image: "/members/a.jpg",
     },
     {
       role: "Vice President",
       name: "Ms. Divyani Daware",
       email: "divyanidaware.etc24@sbjit.edu.in",
-      linkedin: "https://linkedin.com/in/username",
+      linkedin: "https://www.linkedin.com/in/divyani-daware-047716416/",
       image: "/members/b.jpg",
     },
   ];

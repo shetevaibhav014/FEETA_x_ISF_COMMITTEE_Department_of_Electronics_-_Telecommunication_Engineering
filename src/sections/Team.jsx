@@ -10,7 +10,7 @@ const presidentData = {
     "To build an inclusive ecosystem driving technical innovation, student leadership, and impactful collaboration across the ETC forum.",
   image: "/members/a.jpg",
   linkedinId: "in/tushar-thakare",
-  linkedinUrl: "https://linkedin.com/in/tushar-thakare",
+  linkedinUrl: "https://www.linkedin.com/in/tushar-thakare-a44445342/",
 };
 
 // Complete list of 21 FEETA Members
