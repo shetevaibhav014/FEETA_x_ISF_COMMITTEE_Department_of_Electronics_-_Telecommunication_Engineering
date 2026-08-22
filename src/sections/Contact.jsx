@@ -14,7 +14,7 @@ function Contact() {
       name: "Mr. Tushar Thakare",
       email: "tusharthakare.etc24@sbjit.edu.in",
       linkedin: "https://linkedin.com/in/username",
-      image: "/members/a.png",
+      image: "/members/a.jpg",
     },
     {
       role: "Vice President",

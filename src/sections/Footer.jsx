@@ -21,14 +21,14 @@ function Footer() {
 
             {/* Email Contact */}
             <a
-              href="mailto:feetaisfcommittee@gmail.com"
+              href="mailto:etcforum@sbjit.edu.in"
               className="group inline-flex items-center gap-2.5 text-xs sm:text-sm text-slate-400 transition-all duration-200 hover:translate-x-1 hover:text-white mt-1 w-fit"
             >
               <svg className="h-4 w-4 shrink-0 text-blue-500 transition-transform duration-200 group-hover:scale-110" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <rect width="20" height="16" x="2" y="4" rx="2" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
               </svg>
-              <span className="break-all sm:break-normal">feetaisfcommittee@gmail.com</span>
+              <span className="break-all sm:break-normal">etcforum@sbjit.edu.in</span>
             </a>
 
             {/* Mobile Contact */}
@@ -83,6 +83,15 @@ function Footer() {
               <span>S.B. Jain Institute of Technology, Management and Research, Nagpur</span>
             </a>
 
+            {/* Working Hours */}
+            <div className="inline-flex items-center gap-2.5 text-xs sm:text-sm text-slate-400 w-fit">
+              <svg className="h-4 w-4 shrink-0 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span>Mon - Sat: 9:00 AM - 5:00 PM</span>
+            </div>
+
             {/* LinkedIn */}
             <a
               href="https://www.linkedin.com"
@@ -110,7 +119,7 @@ function Footer() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                 <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <span>OFFICIAL FEETA </span>
+              <span>OFFICIAL FEETA</span>
             </a>
           </div>
 

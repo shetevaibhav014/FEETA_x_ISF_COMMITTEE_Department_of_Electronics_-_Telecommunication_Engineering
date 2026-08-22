@@ -8,7 +8,7 @@ const presidentData = {
   year: "3rd Year",
   vision:
     "To build an inclusive ecosystem driving technical innovation, student leadership, and impactful collaboration across the ETC forum.",
-  image: "/members/a.png",
+  image: "/members/a.jpg",
   linkedinId: "in/tushar-thakare",
   linkedinUrl: "https://linkedin.com/in/tushar-thakare",
 };
@@ -59,7 +59,7 @@ const feetaMembers = [
     name: "Mr. Vansh Gawande",
     role: "Event Manager",
     year: "3rd Year",
-    image: "/members/vansh.jpg",
+    image: "/members/vansh.png",
     linkedinId: "in/vansh-gawande",
     linkedinUrl: "https://linkedin.com/in/vansh-gawande",
   },
@@ -91,7 +91,7 @@ const feetaMembers = [
     name: "Mr. Somesh Khangare",
     role: "Discipline Head",
     year: "3rd Year",
-    image: "/members/somesh.jpg",
+    image: "/members/somesh.png",
     linkedinId: "in/somesh-khangare",
     linkedinUrl: "https://linkedin.com/in/somesh-khangare",
   },
@@ -115,7 +115,7 @@ const feetaMembers = [
     name: "Mr. Yash Gore",
     role: "Design Head",
     year: "2nd Year",
-    image: "/members/yash.png",
+    image: "/members/yash-g.png",
     linkedinId: "in/yash-gore",
     linkedinUrl: "https://linkedin.com/in/yash-gore",
   },
@@ -179,7 +179,7 @@ const feetaMembers = [
     name: "Mr. Harshit Masram",
     role: "Student Co-ordinator",
     year: "2nd Year",
-    image: "/members/harshit.jpg",
+    image: "/members/harshit.png",
     linkedinId: "in/harshit-masram",
     linkedinUrl: "https://linkedin.com/in/harshit-masram",
   },
@@ -247,7 +247,7 @@ const isfMembers = [
     name: "Ms. Samiksha Thakare",
     role: "Member - ISF",
     year: "3rd Year",
-    image: "/members/samiksha.png",
+    image: "/members/samiksha.jpg",
     linkedinId: "in/samiksha-thakare",
     linkedinUrl: "https://linkedin.com/in/samiksha-thakare",
   },
@@ -312,7 +312,6 @@ const mentors = [
   },
 ];
 
-// category: "FEETA" | "ISF" | null (null/undefined = full team page with toggle)
 function Team({
   category = null,
   eyebrow,
@@ -324,14 +323,20 @@ function Team({
 } = {}) {
   const scrollRef = useRef(null);
   const isFiltered = category === "FEETA" || category === "ISF";
-  const [activeCategory, setActiveCategory] = useState(category || "FEETA"); // "FEETA" or "ISF"
+  const [activeCategory, setActiveCategory] = useState(category || "FEETA");
+  const [activeDotIndex, setActiveDotIndex] = useState(0);
 
   const resolvedShowToggle = showToggle ?? !isFiltered;
   const resolvedShowPresident = showPresident ?? !isFiltered;
   const resolvedShowMentors = showMentors ?? !isFiltered;
 
   const resolvedEyebrow =
-    eyebrow ?? (category === "FEETA" ? "Student Forum" : category === "ISF" ? "Technical Committee" : "Our Team");
+    eyebrow ??
+    (category === "FEETA"
+      ? "Student Forum"
+      : category === "ISF"
+      ? "Technical Committee"
+      : "Our Team");
 
   const resolvedTitle =
     title ??
@@ -342,10 +347,11 @@ function Team({
       : "Meet the ETC Forum");
 
   const displayedMembers = activeCategory === "FEETA" ? feetaMembers : isfMembers;
+  const totalDots = 5;
 
   const handleScroll = (direction) => {
     if (scrollRef.current) {
-      const scrollAmount = 300;
+      const scrollAmount = 280;
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
 
       if (direction === "right") {
@@ -364,6 +370,42 @@ function Team({
     }
   };
 
+  const updatePaginationOnScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      if (maxScroll > 0) {
+        const scrollFraction = scrollLeft / maxScroll;
+        const newIndex = Math.min(
+          Math.floor(scrollFraction * totalDots),
+          totalDots - 1
+        );
+        setActiveDotIndex(newIndex);
+      }
+    }
+  };
+
+  const handleDotClick = (index) => {
+    if (scrollRef.current) {
+      const { scrollWidth, clientWidth } = scrollRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      const targetScroll = (index / (totalDots - 1)) * maxScroll;
+      scrollRef.current.scrollTo({ left: targetScroll, behavior: "smooth" });
+      setActiveDotIndex(index);
+    }
+  };
+
+  const getDotStyles = (index) => {
+    const distance = Math.abs(index - activeDotIndex);
+    if (distance === 0) {
+      return "w-3.5 h-3.5 bg-slate-900 scale-100 opacity-100";
+    } else if (distance === 1) {
+      return "w-3 h-3 bg-slate-300 scale-90 opacity-80 hover:bg-slate-400";
+    } else {
+      return "w-2.5 h-2.5 bg-slate-200 scale-75 opacity-60 hover:bg-slate-400";
+    }
+  };
+
   useEffect(() => {
     const timer = setInterval(() => {
       handleScroll("right");
@@ -371,6 +413,14 @@ function Team({
 
     return () => clearInterval(timer);
   }, []);
+
+  // Reset scroll and dot position when category changes
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
+    }
+    setActiveDotIndex(0);
+  }, [activeCategory]);
 
   return (
     <section id="team" className="bg-slate-50 py-24 overflow-hidden">
@@ -439,7 +489,7 @@ function Team({
                   : "bg-white text-slate-800 border border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600"
               }`}
             >
-              ISF Members 
+              ISF Members
             </button>
 
             <button
@@ -459,6 +509,7 @@ function Team({
       {/* 2. Member Carousel */}
       <div
         ref={scrollRef}
+        onScroll={updatePaginationOnScroll}
         className="mt-12 flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth px-6 py-4"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
@@ -469,29 +520,63 @@ function Team({
         ))}
       </div>
 
-      {/* Scroll Control Buttons */}
-      <div className="mt-8 flex justify-center items-center gap-6">
-        <span
+      {/* Styled Pagination Controls */}
+      <div className="mt-8 flex items-center justify-center gap-6">
+        {/* Previous Button */}
+        <button
           onClick={() => handleScroll("left")}
-          className="cursor-pointer text-2xl font-bold tracking-widest text-slate-500 transition-all duration-300 hover:text-blue-600 hover:scale-125 hover:-translate-x-1 active:scale-95 select-none"
+          className="group flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md border border-slate-200 transition-all duration-200 hover:bg-slate-50 hover:shadow-lg active:scale-95 cursor-pointer"
           aria-label="Previous Members"
-          role="button"
-          tabIndex={0}
         >
-          &lt;&lt;
-        </span>
+          <svg
+            className="h-5 w-5 text-slate-800 transition-transform group-hover:-translate-x-0.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+            />
+          </svg>
+        </button>
 
-        <span className="text-slate-300 font-light select-none">• • • • •</span>
+        {/* Dynamic Dots Navigation */}
+        <div className="flex items-center gap-2 px-2">
+          {Array.from({ length: totalDots }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handleDotClick(index)}
+              className={`rounded-full transition-all duration-300 ease-out cursor-pointer ${getDotStyles(
+                index
+              )}`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
 
-        <span
+        {/* Next Button */}
+        <button
           onClick={() => handleScroll("right")}
-          className="cursor-pointer text-2xl font-bold tracking-widest text-slate-500 transition-all duration-300 hover:text-blue-600 hover:scale-125 hover:translate-x-1 active:scale-95 select-none"
+          className="group flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md border border-slate-200 transition-all duration-200 hover:bg-slate-50 hover:shadow-lg active:scale-95 cursor-pointer"
           aria-label="Next Members"
-          role="button"
-          tabIndex={0}
         >
-          &gt;&gt;
-        </span>
+          <svg
+            className="h-5 w-5 text-slate-800 transition-transform group-hover:translate-x-0.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+            />
+          </svg>
+        </button>
       </div>
 
       {/* 3. Mentors Section */}
@@ -526,8 +611,12 @@ function Team({
                 <h4 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                   {mentor.name}
                 </h4>
-                <p className="text-sm font-medium text-blue-600">{mentor.position}</p>
-                <p className="text-xs text-slate-500 mt-1 font-medium">{mentor.year}</p>
+                <p className="text-sm font-medium text-blue-600">
+                  {mentor.position}
+                </p>
+                <p className="text-xs text-slate-500 mt-1 font-medium">
+                  {mentor.year}
+                </p>
 
                 <a
                   href={mentor.linkedinUrl}
