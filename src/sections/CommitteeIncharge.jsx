@@ -8,8 +8,8 @@ function CommitteeIncharge() {
     name: "Prof. Ayushi Jaiswal",
     position: "Forum In-Charge",
     photo: "/members/incharge.jpg",
-    linkedin: "https://www.linkedin.com/in/ayushi-jaiswal", // Update with exact LinkedIn URL
-    email: "ayushijaiswal@sbjit.edu.in", // Update with exact email address
+    linkedin: "https://www.linkedin.com/in/ayushi-jaiswal-22293737/", 
+    email: "ayushijaiswal@sbjit.edu.in", 
   };
 
   return (
