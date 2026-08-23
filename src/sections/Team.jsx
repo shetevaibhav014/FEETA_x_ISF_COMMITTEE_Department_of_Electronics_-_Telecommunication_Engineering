@@ -61,7 +61,7 @@ const feetaMembers = [
     year: "3rd Year",
     image: "/members/vansh.png",
     linkedinId: "in/vansh-gawande",
-    linkedinUrl: "https://linkedin.com/in/vansh-gawande",
+    linkedinUrl: "https://www.linkedin.com/in/vansh-gawande-40076a430/",
   },
   {
     name: "Mr. Harsh Thombre",
@@ -93,7 +93,7 @@ const feetaMembers = [
     year: "3rd Year",
     image: "/members/somesh.png",
     linkedinId: "in/somesh-khangare",
-    linkedinUrl: "https://linkedin.com/in/somesh-khangare",
+    linkedinUrl: "https://www.linkedin.com/in/somesh-khangare-321443342/",
   },
   {
     name: "Mr. Sujal Jangilwar",
@@ -117,7 +117,7 @@ const feetaMembers = [
     year: "2nd Year",
     image: "/members/yash-g.png",
     linkedinId: "in/yash-gore",
-    linkedinUrl: "https://linkedin.com/in/yash-gore",
+    linkedinUrl: "https://www.linkedin.com/in/yash-gore-5a9878430/",
   },
   {
     name: "Ms. Vidhi Chavhan",
@@ -217,7 +217,7 @@ const isfMembers = [
     year: "3rd Year",
     image: "/members/yash-makade.png",
     linkedinId: "in/yash-makade",
-    linkedinUrl: "https://linkedin.com/in/yash-makade",
+    linkedinUrl: "https://www.linkedin.com/in/yash-makade-6995aa36a/",
   },
   {
     name: "Mr. Himanshu Kukde",
@@ -425,58 +425,75 @@ function Team({
   return (
     <section id="team" className="bg-slate-50 py-24 overflow-hidden">
       {/* 1. Header & President Section */}
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">
-            {resolvedEyebrow}
-          </p>
-          {isFiltered ? (
-            <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-              {resolvedTitle}
-            </h2>
-          ) : (
-            <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-              Meet the <span className="text-blue-600">ETC Forum</span>
-            </h2>
-          )}
+<div className="mx-auto max-w-7xl px-6">
+  <div className="mx-auto max-w-3xl text-center">
+    <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">
+      {resolvedEyebrow}
+    </p>
+    {isFiltered ? (
+      <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+        {resolvedTitle}
+      </h2>
+    ) : (
+      <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+        Meet the <span className="text-blue-600">ETC Forum</span>
+      </h2>
+    )}
 
-          {vision && (
-            <blockquote className="mt-6 italic text-slate-600 text-sm sm:text-base leading-relaxed">
-              "{vision}"
-            </blockquote>
-          )}
+    {vision && (
+      <blockquote className="mt-6 italic text-slate-600 text-sm sm:text-base leading-relaxed">
+        "{vision}"
+      </blockquote>
+    )}
+  </div>
+
+  {/* Centered President Card */}
+  {resolvedShowPresident && (
+    <div className="mt-12 flex justify-center">
+      <div className="w-full max-w-2xl bg-white rounded-3xl p-8 shadow-xl border border-blue-100 text-center flex flex-col items-center transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+        <div className="overflow-hidden rounded-full h-36 w-36 ring-4 ring-blue-500/20 shadow-md mb-6">
+          <img
+            src={presidentData.image}
+            alt={presidentData.name}
+            className="h-full w-full object-cover"
+          />
         </div>
 
-        {/* Centered President Card */}
-        {resolvedShowPresident && (
-          <div className="mt-12 flex justify-center">
-            <div className="w-full max-w-2xl bg-white rounded-3xl p-8 shadow-xl border border-blue-100 text-center flex flex-col items-center transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-              <div className="overflow-hidden rounded-full h-36 w-36 ring-4 ring-blue-500/20 shadow-md mb-6">
-                <img
-                  src={presidentData.image}
-                  alt={presidentData.name}
-                  className="h-full w-full object-cover"
-                />
-              </div>
+        <span className="px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider mb-2">
+          {presidentData.role}
+        </span>
 
-              <span className="px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider mb-2">
-                {presidentData.role}
-              </span>
+        <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+          {presidentData.name}
+        </h3>
 
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                {presidentData.name}
-              </h3>
+        <p className="text-xs sm:text-sm font-semibold text-slate-500 mt-1 uppercase tracking-wider">
+          {presidentData.department} • {presidentData.year}
+        </p>
 
-              <p className="text-xs sm:text-sm font-semibold text-slate-500 mt-1 uppercase tracking-wider">
-                {presidentData.department} • {presidentData.year}
-              </p>
+        <blockquote className="mt-4 italic text-slate-600 text-sm sm:text-base leading-relaxed max-w-lg">
+          "{presidentData.vision}"
+        </blockquote>
 
-              <blockquote className="mt-4 italic text-slate-600 text-sm sm:text-base leading-relaxed max-w-lg">
-                "{presidentData.vision}"
-              </blockquote>
-            </div>
-          </div>
-        )}
+        {/* LinkedIn Button */}
+        <a
+          href={presidentData.linkedinUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-blue-600 hover:text-white transition-all duration-300 text-xs font-semibold shadow-sm hover:shadow-md hover:scale-105"
+          aria-label={`Visit ${presidentData.name}'s LinkedIn profile`}
+        >
+          <svg
+            className="h-4 w-4 fill-current text-blue-600 group-hover:text-white transition-colors"
+            viewBox="0 0 24 24"
+          >
+            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-1.3.7-2.1 1.75-2.1 1.05 0 1.5.8 1.5 2.1v4.93h2.79M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.54a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Z" />
+          </svg>
+          <span>{presidentData.linkedinId}</span>
+        </a>
+      </div>
+    </div>
+  )}
 
         {/* Category Toggle Buttons */}
         {resolvedShowToggle && (
