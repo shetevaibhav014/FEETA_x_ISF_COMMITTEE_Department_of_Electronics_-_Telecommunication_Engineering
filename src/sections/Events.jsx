@@ -2,7 +2,7 @@ import { useState } from "react"
 
 const events = [
   {
-    date: "20",
+    date: "25",
     month: "AUG",
     title: "FORUM INSTALLATION",
     description:
