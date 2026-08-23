@@ -29,7 +29,7 @@ const feetaMembers = [
     year: "3rd Year",
     image: "/members/prathmesh.png",
     linkedinId: "in/prathmesh-kharalkar",
-    linkedinUrl: "https://linkedin.com/in/prathmesh-kharalkar",
+    linkedinUrl: "https://www.linkedin.com/in/prathmesh-k-535525330/",
   },
   {
     name: "Ms. Tanvi Wankhede",
@@ -37,7 +37,7 @@ const feetaMembers = [
     year: "2nd Year",
     image: "/members/tanvi.png",
     linkedinId: "in/tanvi-wankhede",
-    linkedinUrl: "https://linkedin.com/in/tanvi-wankhede",
+    linkedinUrl: "https://www.linkedin.com/in/tanvi-wankhede-3b15613ab/",
   },
   {
     name: "Ms. Triveni Naik",
@@ -85,7 +85,7 @@ const feetaMembers = [
     year: "3rd Year",
     image: "/members/piyush.jpeg",
     linkedinId: "in/piyush-bawankar",
-    linkedinUrl: "https://linkedin.com/in/piyush-bawankar",
+    linkedinUrl: "https://www.linkedin.com/in/piyush-bawankar-820413337/",
   },
   {
     name: "Mr. Somesh Khangare",
@@ -101,7 +101,7 @@ const feetaMembers = [
     year: "2nd Year",
     image: "/members/sujal.jpg",
     linkedinId: "in/sujal-jangilwar",
-    linkedinUrl: "https://linkedin.com/in/sujal-jangilwar",
+    linkedinUrl: "https://www.linkedin.com/in/sujal-jangilwar-21197a3a9/",
   },
   {
     name: "Mr. Siddhesh Hedau",
@@ -109,7 +109,7 @@ const feetaMembers = [
     year: "2nd Year",
     image: "/members/sidhesh.jpg",
     linkedinId: "in/sidhesh-hedau",
-    linkedinUrl: "https://linkedin.com/in/sidhesh-hedau",
+    linkedinUrl: "https://www.linkedin.com/in/siddhesh-u-hedau-590655430/",
   },
   {
     name: "Mr. Yash Gore",
@@ -125,7 +125,7 @@ const feetaMembers = [
     year: "2nd Year",
     image: "/members/vidhi.jpg",
     linkedinId: "in/vidhi-chavhan",
-    linkedinUrl: "https://linkedin.com/in/vidhi-chavhan",
+    linkedinUrl: "https://www.linkedin.com/in/vidhi-chavhan-91085a430/",
   },
   {
     name: "Mr. Spandan Ingale",
@@ -141,7 +141,7 @@ const feetaMembers = [
     year: "2nd Year",
     image: "/members/dakshata.jpg",
     linkedinId: "in/dakshata-kadu",
-    linkedinUrl: "https://linkedin.com/in/dakshata-kadu",
+    linkedinUrl: "https://www.linkedin.com/in/dakshata-kadu-3148bb385/",
   },
   {
     name: "Ms. Vedanti Chandore",
@@ -149,7 +149,7 @@ const feetaMembers = [
     year: "2nd Year",
     image: "/members/vedanti.jpg",
     linkedinId: "in/vedanti-chandore",
-    linkedinUrl: "https://linkedin.com/in/vedanti-chandore",
+    linkedinUrl: "https://www.linkedin.com/in/vedanti-chandore-6b15723a5/",
   },
   {
     name: "Ms. Chetna Kamdi",
@@ -157,7 +157,7 @@ const feetaMembers = [
     year: "2nd Year",
     image: "/members/chetana.png",
     linkedinId: "in/chetana-kamdi",
-    linkedinUrl: "https://linkedin.com/in/chetana-kamdi",
+    linkedinUrl: "https://www.linkedin.com/in/chetana-kamdi-0535823b8/",
   },
   {
     name: "Mr. Vedant Zilpe",
@@ -165,7 +165,7 @@ const feetaMembers = [
     year: "2nd Year",
     image: "/members/vedant-z.png",
     linkedinId: "in/vedant-zilpe",
-    linkedinUrl: "https://linkedin.com/in/vedant-zilpe",
+    linkedinUrl: "https://www.linkedin.com/in/vedant-zilpe-2b944b378/",
   },
   {
     name: "Mr. Mayank Chandrakapure",
@@ -173,7 +173,7 @@ const feetaMembers = [
     year: "2nd Year",
     image: "/members/mayank.jpg",
     linkedinId: "in/mayank-chandrakapure",
-    linkedinUrl: "https://linkedin.com/in/mayank-chandrakapure",
+    linkedinUrl: "https://www.linkedin.com/in/mayank-chandrakapure-3b8a68383/",
   },
   {
     name: "Mr. Harshit Masram",
@@ -181,7 +181,7 @@ const feetaMembers = [
     year: "2nd Year",
     image: "/members/harshit.png",
     linkedinId: "in/harshit-masram",
-    linkedinUrl: "https://linkedin.com/in/harshit-masram",
+    linkedinUrl: "https://www.linkedin.com/in/harshit-masram-b420633ab/",
   },
 ];
 
@@ -193,7 +193,7 @@ const isfMembers = [
     year: "3rd Year",
     image: "/members/yash-site.jpg",
     linkedinId: "in/yash-site",
-    linkedinUrl: "https://linkedin.com/in/yash-site",
+    linkedinUrl: "https://www.linkedin.com/in/yash-site-5a52ab375/",
   },
   {
     name: "Mr. Vaibhav Shete",
@@ -225,7 +225,7 @@ const isfMembers = [
     year: "3rd Year",
     image: "/members/himanshu-k.jpg",
     linkedinId: "in/himanshu-kukde",
-    linkedinUrl: "https://linkedin.com/in/himanshu-kukde",
+    linkedinUrl: "https://www.linkedin.com/in/himanshu-kukde-72a6053a5/",
   },
   {
     name: "Mr. Soham Nagmote",
@@ -233,7 +233,7 @@ const isfMembers = [
     year: "3rd Year",
     image: "/members/soham.png",
     linkedinId: "in/soham-nagmote",
-    linkedinUrl: "https://linkedin.com/in/soham-nagmote",
+    linkedinUrl: "https://www.linkedin.com/in/soham-nagmote-b9794b31a/",
   },
   {
     name: "Mr. Himanshu Lokhande",
@@ -241,7 +241,7 @@ const isfMembers = [
     year: "3rd Year",
     image: "/members/himanshu-l.jpg",
     linkedinId: "in/himanshu-lokhande",
-    linkedinUrl: "https://linkedin.com/in/himanshu-lokhande",
+    linkedinUrl: "https://www.linkedin.com/in/himanshu-lokhande-6b39a42b3/",
   },
   {
     name: "Ms. Samiksha Thakare",
@@ -249,7 +249,7 @@ const isfMembers = [
     year: "3rd Year",
     image: "/members/samiksha.jpg",
     linkedinId: "in/samiksha-thakare",
-    linkedinUrl: "https://linkedin.com/in/samiksha-thakare",
+    linkedinUrl: "https://www.linkedin.com/in/samiksha-thakre-a61445342/",
   },
   {
     name: "Mr. Aaruni Pisal",
@@ -257,7 +257,7 @@ const isfMembers = [
     year: "2nd Year",
     image: "/members/aaruni.jpg",
     linkedinId: "in/aaruni-pisal",
-    linkedinUrl: "https://linkedin.com/in/aaruni-pisal",
+    linkedinUrl: "https://www.linkedin.com/in/aaruni-pisal-31885a430/",
   },
   {
     name: "Mr. Nikhil Shelke",
@@ -265,7 +265,7 @@ const isfMembers = [
     year: "2nd Year",
     image: "/members/nikhil.png",
     linkedinId: "in/nikhil-shelke",
-    linkedinUrl: "https://linkedin.com/in/nikhil-shelke",
+    linkedinUrl: "https://www.linkedin.com/in/nikhil-shelke-6756563b3/",
   },
   {
     name: "Ms. Sumedha Indurkar",
@@ -273,7 +273,7 @@ const isfMembers = [
     year: "2nd Year",
     image: "/members/sumedha.png",
     linkedinId: "in/sumedha-indurkar",
-    linkedinUrl: "https://linkedin.com/in/sumedha-indurkar",
+    linkedinUrl: "https://www.linkedin.com/in/sumedha-indurkar-75a145401/",
   },
 ];
 
