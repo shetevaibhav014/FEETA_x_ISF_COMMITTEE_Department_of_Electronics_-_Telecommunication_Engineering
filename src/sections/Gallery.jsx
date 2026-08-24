@@ -165,7 +165,7 @@ function Gallery() {
           </p>
 
           <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-            ETC Forum
+            Forum
             <span className="text-blue-600"> Gallery</span>
           </h2>
 

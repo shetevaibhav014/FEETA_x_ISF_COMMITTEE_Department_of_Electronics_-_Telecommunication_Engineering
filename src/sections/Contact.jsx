@@ -34,7 +34,7 @@ function Contact() {
             Get In Touch
           </p>
           <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-            Connect With <span className="text-blue-600">ETC Forum</span>
+            Connect With <span className="text-blue-600">Forum</span>
           </h2>
           <p className="mt-6 text-lg leading-8 text-slate-600">
             Have a question, suggestion or want to participate in our activities?
