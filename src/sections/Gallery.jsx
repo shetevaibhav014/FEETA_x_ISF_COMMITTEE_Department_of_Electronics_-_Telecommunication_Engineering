@@ -52,6 +52,31 @@ const photos = [
     category: "Interaction",
   },
   {
+    image: "/gallery/alumini.jpeg",
+    title: "Alumini Meet",
+    category: "Interaction",
+  },
+  {
+    image: "/gallery/faculty.jpeg",
+    title: "Faculties",
+    category: "Techno",
+  },
+  {
+    image: "/gallery/squid.jpeg",
+    title: "Squid Game",
+    category: "Techno 2026",
+  },
+  {
+    image: "/gallery/teacher.jpeg",
+    title: " ",
+    category: " ",
+  },
+  {
+    image: "/gallery/techno.jpeg",
+    title: "WE",
+    category: "Techno 2026",
+  },
+  {
     image: "/gallery/bts.jpeg",
     title: "Behind the Scene",
     category: ".",
