@@ -145,7 +145,7 @@ const feetaMembers = [
   },
   {
     name: "Ms. Vedanti Chandore",
-    role: "Joint Invitation & Reception / PRO Head",
+    role: "Joint Invitation / PRO Head",
     year: "2nd Year",
     image: "/members/vedanti.jpeg",
     linkedinId: "in/vedanti-chandore",
