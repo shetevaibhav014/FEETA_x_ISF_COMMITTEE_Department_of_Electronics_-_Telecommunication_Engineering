@@ -436,7 +436,7 @@ function Team({
       </h2>
     ) : (
       <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-        Meet the <span className="text-blue-600">ETC Forum</span>
+        Meet the <span className="text-blue-600">Forum</span>
       </h2>
     )}
 
