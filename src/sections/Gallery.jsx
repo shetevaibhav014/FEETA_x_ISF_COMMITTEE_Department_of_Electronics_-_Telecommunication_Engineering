@@ -22,6 +22,26 @@ const photos = [
     category: "Workshop",
   },
   {
+    image: "/gallery/ganesha.jpeg",
+    title: "Ganesh Chaturthi 2024",
+    category: "Cultural",
+  },
+  {
+    image: "/gallery/Navratri.jpeg",
+    title: "Navratri 2025",
+    category: "Cultural",
+  },
+  {
+    image: "/gallery/SIH.jpeg",
+    title: "SIH 2025",
+    category: "Technical",
+  },
+  {
+    image: "/gallery/Compet.jpeg",
+    title: "Project Expo",
+    category: "Technical",
+  },
+  {
     image: "/gallery/seminar.jpeg",
     title: "Click to Connect",
     category: "Seminar",
@@ -69,6 +89,11 @@ const photos = [
   {
     image: "/gallery/teacher.jpeg",
     title: " ",
+    category: " ",
+  },
+  {
+    image: "/gallery/f.jpeg",
+    title: "Faculties",
     category: " ",
   },
   {
