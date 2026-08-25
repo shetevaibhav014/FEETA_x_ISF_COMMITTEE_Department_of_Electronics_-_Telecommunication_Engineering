@@ -14,6 +14,7 @@ import Community from "./sections/Community";
 import Contact from "./sections/Contact";
 import Footer from "./sections/Footer";
 import NotFound from "./sections/NotFound";
+import InstallationGallery from "./sections/InstallationGallery"; // Added Import
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,7 @@ function App() {
         <Route path="/activities" element={<Activities />} />
         <Route path="/events" element={<Events />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/installation-ceremony" element={<InstallationGallery />} /> {/* Added Route */}
         <Route path="/achievements" element={<Achievements />} />
         <Route path="/team" element={<Team />} />
         <Route path="/community" element={<Community />} />

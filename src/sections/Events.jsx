@@ -10,12 +10,12 @@ const events = [
     category: "Cultural",
   },
   {
-    date: "...",
-    month: "...",
-    title: "Coming Soon",
+    date: " . ",
+    month: "SEPT",
+    title: "Engineering Day",
     description:
-      "Stay Tuned !!!!!!!!!!!!!!!",
-    category: "Coming..............",
+      "To celebrate engineering ingenuity while building a collaborative ecosystem where aspiring technologists innovate, build, and lead.",
+    category: "Technical",
   },
   {
      date: "...",

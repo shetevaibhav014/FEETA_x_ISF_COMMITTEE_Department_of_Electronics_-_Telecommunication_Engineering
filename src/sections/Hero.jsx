@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import EtcBackground from "./EtcBackground" // Ensure path matches your file location
 
 export default function Hero() {
   const fullText = "A platform for students to learn, innovate, collaborate and lead through technology and teamwork."
   const [displayedText, setDisplayedText] = useState("")
+  const [showPopup, setShowPopup] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     let index = 0
@@ -19,6 +21,24 @@ export default function Hero() {
 
     return () => clearInterval(typingInterval)
   }, [])
+
+  // Auto-trigger the Installation Ceremony popup after 1.5 seconds
+  useEffect(() => {
+    const popupTimer = setTimeout(() => {
+      setShowPopup(true)
+    }, 1500)
+
+    return () => clearTimeout(popupTimer)
+  }, [])
+
+  const handleSelectPopup = () => {
+    setShowPopup(false);
+    navigate("/installation-ceremony"); // Match the exact route in App.jsx
+  };
+
+  const handleCancelPopup = () => {
+    setShowPopup(false)
+  }
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent">
@@ -95,6 +115,7 @@ export default function Hero() {
             to="/community"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => e.currentTarget.blur()}
             className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold text-sm sm:text-base transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.5)] hover:shadow-[0_0_30px_rgba(6,182,212,0.8)] hover:from-blue-500 hover:to-cyan-500 hover:-translate-y-0.5 active:translate-y-0"
           >
             Explore Community
@@ -137,6 +158,71 @@ export default function Hero() {
         </div>
 
       </div>
+
+      {/* Installation Ceremony Modal Popup */}
+      {showPopup && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
+          <div className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white p-6 shadow-2xl transition-all border border-slate-100 text-slate-900">
+            
+            {/* Close Cross Button */}
+            <button
+              onClick={handleCancelPopup}
+              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition-colors"
+              aria-label="Close"
+            >
+              ✕
+            </button>
+
+            {/* FEETA & ISF Logos Side-by-Side */}
+            <div className="mx-auto flex items-center justify-center gap-3 py-2">
+              <img
+                src="/feeta.png"
+                alt="FEETA Logo"
+                className="h-10 w-10 object-contain drop-shadow"
+              />
+              <span className="text-slate-400 font-light text-lg">×</span>
+              <img
+                src="/ISF.png"
+                alt="ISF Logo"
+                className="h-10 w-10 object-contain drop-shadow"
+              />
+            </div>
+
+            {/* Popup Content */}
+            <div className="mt-4 text-center">
+              <span className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+                Featured Event
+              </span>
+              <h3 className="mt-1 text-2xl font-bold text-slate-900">
+                Installation Ceremony
+              </h3>
+              <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+                Take a look at the official highlights, photos, and memorable moments from our ETC Department Installation Ceremony!
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="mt-6 flex gap-3">
+              <button
+                type="button"
+                onClick={handleCancelPopup}
+                className="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+              >
+                Cancel
+              </button>
+              
+              <button
+                type="button"
+                onClick={handleSelectPopup}
+                className="flex-1 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 shadow-md transition-all active:scale-95"
+              >
+                View Photos
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
     </section>
   )
 }

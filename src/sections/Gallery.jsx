@@ -114,13 +114,17 @@ function Gallery() {
   const [isPaused, setIsPaused] = useState(false)
   const scrollRef = useRef(null)
 
-  // Scroll to explicit index on dot click or auto-scroll step
+  // Scroll strictly horizontally to explicit index (prevents page vertical jumps)
   const scrollToIndex = useCallback((index) => {
     if (scrollRef.current) {
       const container = scrollRef.current
       const card = container.children[index]
       if (card) {
-        card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
+        const targetScrollLeft = card.offsetLeft - container.offsetLeft
+        container.scrollTo({
+          left: targetScrollLeft,
+          behavior: "smooth",
+        })
       }
     }
   }, [])
