@@ -95,7 +95,7 @@ function Footer() {
 
             {/* LinkedIn */}
             <a
-              href="https://www.linkedin.com"
+              href="https://www.linkedin.com/company/feeta-forum/about/"
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2.5 text-xs sm:text-sm text-slate-400 transition-all duration-200 hover:translate-x-1 hover:text-white w-fit"

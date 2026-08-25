@@ -55,18 +55,31 @@ function Contact() {
             <p className="mt-2 text-sm text-slate-600">etcforum@sbjit.edu.in</p>
           </a>
 
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-8 text-center transition duration-300 hover:-translate-y-2 hover:border-blue-300 hover:bg-white hover:shadow-xl">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-2xl">
+          <a
+            href="https://maps.app.goo.gl/WU3GtKYk3fxEXXKY6"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block rounded-2xl border border-slate-200 bg-slate-50 p-8 text-center transition duration-300 hover:-translate-y-2 hover:border-blue-300 hover:bg-white hover:shadow-xl group"
+>
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-2xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
               📍
             </div>
-            <h3 className="mt-5 text-xl font-bold text-slate-900">Location</h3>
+  
+            <h3 className="mt-5 text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+              Location
+            </h3>
+  
             <p className="mt-2 text-sm text-slate-600">
               Department of ETC, SBJITMR, Nagpur
             </p>
-          </div>
+
+            <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-blue-600 group-hover:underline">
+            Open in Google Maps →
+            </span>
+          </a>
 
           <a
-            href="https://linkedin.com"
+            href="https://linkedin.com/company/feeta-forum"
             target="_blank"
             rel="noopener noreferrer"
             className="group rounded-2xl border border-slate-200 bg-slate-50 p-8 text-center transition duration-300 hover:-translate-y-2 hover:border-blue-300 hover:bg-white hover:shadow-xl"
