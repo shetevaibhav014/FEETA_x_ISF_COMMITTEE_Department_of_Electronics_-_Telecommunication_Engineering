@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const installationPhotos = [
   { id: 1, image: "/installation-ceremony/a.jpeg", title: "Guests & Honored Dignitaries", category: "Installation - 2026", date: "AUG 25, 2026" },
   { id: 2, image: "/installation-ceremony/y.jpeg", title: "Shanti Bhavan Auditorium", category: "Installation - 2026", date: "AUG 25, 2026" },
-  { id: 3, image: "/installation-ceremony/warden.jpeg", title: "Executive Committee", category: "Installation - 2026", date: "AUG 25, 2026" },
+  { id: 3, image: "/installation-ceremony/warden.jpeg", title: "Committee - 2026", category: "Installation - 2026", date: "AUG 25, 2026" },
   { id: 4, image: "/installation-ceremony/grp.jpeg", title: "FEETA x ISF", category: "Installation - 2026", date: "AUG 25, 2026" },
   { id: 5, image: "/installation-ceremony/x.jpeg", title: "Ceremonial Inauguration", category: "Installation - 2026", date: "AUG 25, 2026" },
 ];
