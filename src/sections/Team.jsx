@@ -279,7 +279,7 @@ const isfMembers = [
 
 const mentors = [
   {
-    name: "MR. CHAITYANYA WANKHEDE",
+    name: "Mr. Chaitanya Wankhede",
     position: "Mentor",
     year: "4th Year",
     linkedinId: "in/chaitanyawankhede",
@@ -287,7 +287,7 @@ const mentors = [
     image: "/members/m1.jpg",
   },
   {
-    name: "MS. AYUSHI MANKAR",
+    name: "Ms. Ayushi Mankar",
     position: "Mentor",
     year: "4th Year",
     linkedinId: "in/ayushimankar",
@@ -295,7 +295,7 @@ const mentors = [
     image: "/members/m2.jpg",
   },
   {
-    name: "MR. SOUMYA BAWANE",
+    name: "Mr. Soumya Bawane",
     position: "Mentor",
     year: "4th Year",
     linkedinId: "in/soumyabawane",
@@ -303,7 +303,7 @@ const mentors = [
     image: "/members/m3.png",
   },
   {
-    name: "MR. KRISH SARODE",
+    name: "Mr. Krish Sarode",
     position: "Mentor",
     year: "4th Year",
     linkedinId: "in/krishsarode",
@@ -425,85 +425,85 @@ function Team({
   return (
     <section id="team" className="bg-slate-50 py-24 overflow-hidden">
       {/* 1. Header & President Section */}
-<div className="mx-auto max-w-7xl px-6">
-  <div className="mx-auto max-w-3xl text-center">
-    <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">
-      {resolvedEyebrow}
-    </p>
-    {isFiltered ? (
-      <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-        {resolvedTitle}
-      </h2>
-    ) : (
-      <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-        Meet the <span className="text-blue-600">Forum</span>
-      </h2>
-    )}
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">
+            {resolvedEyebrow}
+          </p>
+          {isFiltered ? (
+            <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+              {resolvedTitle}
+            </h2>
+          ) : (
+            <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+              Meet the <span className="text-blue-600">Forum</span>
+            </h2>
+          )}
 
-    {vision && (
-      <blockquote className="mt-6 italic text-slate-600 text-sm sm:text-base leading-relaxed">
-        "{vision}"
-      </blockquote>
-    )}
-  </div>
-
-  {/* Centered President Card */}
-  {resolvedShowPresident && (
-    <div className="mt-12 flex justify-center">
-      <div className="w-full max-w-2xl bg-white rounded-3xl p-8 shadow-xl border border-blue-100 text-center flex flex-col items-center transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-        <div className="overflow-hidden rounded-full h-36 w-36 ring-4 ring-blue-500/20 shadow-md mb-6">
-          <img
-            src={presidentData.image}
-            alt={presidentData.name}
-            className="h-full w-full object-cover"
-          />
+          {vision && (
+            <blockquote className="mt-6 italic text-slate-600 text-sm sm:text-base leading-relaxed">
+              "{vision}"
+            </blockquote>
+          )}
         </div>
 
-        <span className="px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider mb-2">
-          {presidentData.role}
-        </span>
+        {/* Centered President Card */}
+        {resolvedShowPresident && (
+          <div className="mt-12 flex justify-center">
+            <div className="w-full max-w-2xl bg-white rounded-3xl p-8 shadow-xl border border-blue-100 text-center flex flex-col items-center transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+              <div className="overflow-hidden rounded-full h-36 w-36 ring-4 ring-blue-500/20 shadow-md mb-6">
+                <img
+                  src={presidentData.image}
+                  alt={presidentData.name}
+                  className="h-full w-full object-cover"
+                />
+              </div>
 
-        <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-          {presidentData.name}
-        </h3>
+              <span className="px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider mb-2">
+                {presidentData.role}
+              </span>
 
-        <p className="text-xs sm:text-sm font-semibold text-slate-500 mt-1 uppercase tracking-wider">
-          {presidentData.department} • {presidentData.year}
-        </p>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                {presidentData.name}
+              </h3>
 
-        <blockquote className="mt-4 italic text-slate-600 text-sm sm:text-base leading-relaxed max-w-lg">
-          "{presidentData.vision}"
-        </blockquote>
+              <p className="text-xs sm:text-sm font-semibold text-slate-500 mt-1 tracking-wide">
+                {presidentData.department} • {presidentData.year}
+              </p>
 
-        {/* LinkedIn Button */}
-        <a
-          href={presidentData.linkedinUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-blue-600 hover:text-white transition-all duration-300 text-xs font-semibold shadow-sm hover:shadow-md hover:scale-105"
-          aria-label={`Visit ${presidentData.name}'s LinkedIn profile`}
-        >
-          <svg
-            className="h-4 w-4 fill-current text-blue-600 group-hover:text-white transition-colors"
-            viewBox="0 0 24 24"
-          >
-            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-1.3.7-2.1 1.75-2.1 1.05 0 1.5.8 1.5 2.1v4.93h2.79M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.54a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Z" />
-          </svg>
-          <span>{presidentData.linkedinId}</span>
-        </a>
-      </div>
-    </div>
-  )}
+              <blockquote className="mt-4 italic text-slate-600 text-sm sm:text-base leading-relaxed max-w-lg">
+                "{presidentData.vision}"
+              </blockquote>
+
+              {/* LinkedIn Button */}
+              <a
+                href={presidentData.linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 transition-colors text-xs font-semibold shadow-sm"
+                aria-label={`Visit ${presidentData.name}'s LinkedIn profile`}
+              >
+                <svg
+                  className="h-4 w-4 fill-current text-blue-600 group-hover:text-blue-700 transition-colors"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-1.3.7-2.1 1.75-2.1 1.05 0 1.5.8 1.5 2.1v4.93h2.79M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.54a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Z" />
+                </svg>
+                <span>{presidentData.linkedinId}</span>
+              </a>
+            </div>
+          </div>
+        )}
 
         {/* Category Toggle Buttons */}
         {resolvedShowToggle && (
           <div className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-4">
             <button
               onClick={() => setActiveCategory("ISF")}
-              className={`w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer shadow-md ${
+              className={`w-full sm:w-auto px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 shadow-md ${
                 activeCategory === "ISF"
-                  ? "bg-blue-600 text-white border border-blue-600 shadow-blue-500/25"
-                  : "bg-white text-slate-800 border border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600"
+                  ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-blue-500/20 hover:from-blue-500 hover:to-cyan-500"
+                  : "border border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
               }`}
             >
               ISF Members
@@ -511,10 +511,10 @@ function Team({
 
             <button
               onClick={() => setActiveCategory("FEETA")}
-              className={`w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer shadow-md ${
+              className={`w-full sm:w-auto px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 shadow-md ${
                 activeCategory === "FEETA"
-                  ? "bg-blue-600 text-white border border-blue-600 shadow-blue-500/25"
-                  : "bg-white text-slate-800 border border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600"
+                  ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-blue-500/20 hover:from-blue-500 hover:to-cyan-500"
+                  : "border border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
               }`}
             >
               FEETA Members
@@ -639,11 +639,11 @@ function Team({
                   href={mentor.linkedinUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-blue-600 hover:text-white transition-all duration-300 text-xs font-semibold shadow-sm hover:shadow-md hover:scale-105"
+                  className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 transition-colors text-xs font-semibold shadow-sm"
                   aria-label={`Visit ${mentor.name}'s LinkedIn profile`}
                 >
                   <svg
-                    className="h-4 w-4 fill-current text-blue-600 group-hover:text-white transition-colors"
+                    className="h-4 w-4 fill-current text-blue-600 group-hover:text-blue-700 transition-colors"
                     viewBox="0 0 24 24"
                   >
                     <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-1.3.7-2.1 1.75-2.1 1.05 0 1.5.8 1.5 2.1v4.93h2.79M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.54a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Z" />
