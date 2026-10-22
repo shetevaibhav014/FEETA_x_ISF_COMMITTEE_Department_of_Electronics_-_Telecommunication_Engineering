@@ -2,6 +2,96 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
+/**
+ * Reusable Password Field with built-in Show/Hide toggle.
+ */
+function PasswordInput({
+  label = "Password",
+  name = "password",
+  placeholder = "Enter your password",
+  value,
+  onChange,
+  show,
+  onToggleShow,
+  autoComplete = "current-password",
+  required = true,
+}) {
+  return (
+    <label>
+      {label}
+      <div style={{ position: "relative" }}>
+        <input
+          autoComplete={autoComplete}
+          name={name}
+          required={required}
+          type={show ? "text" : "password"}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          style={{ width: "100%", paddingRight: "44px" }}
+        />
+        <button
+          type="button"
+          onClick={onToggleShow}
+          style={{
+            position: "absolute",
+            right: "10px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            color: "#64748b",
+            fontSize: "11px",
+            fontWeight: 600,
+          }}
+        >
+          {show ? "HIDE" : "SHOW"}
+        </button>
+      </div>
+    </label>
+  );
+}
+
+/**
+ * Reusable New Password & Confirm Password input pair.
+ */
+function NewPasswordInputs({
+  newPassword,
+  setNewPassword,
+  confirmPassword,
+  setConfirmPassword,
+  show,
+  onToggleShow,
+}) {
+  return (
+    <>
+      <PasswordInput
+        label="New Password"
+        name="newPassword"
+        placeholder="At least 8 characters"
+        value={newPassword}
+        onChange={(e) => setNewPassword(e.target.value)}
+        show={show}
+        onToggleShow={onToggleShow}
+        autoComplete="new-password"
+      />
+      <label>
+        Confirm New Password
+        <input
+          type={show ? "text" : "password"}
+          name="confirmPassword"
+          required
+          placeholder="Re-enter new password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          autoComplete="new-password"
+        />
+      </label>
+    </>
+  );
+}
+
 export default function AdminLogin({ initialMode }) {
   const [authMode, setAuthMode] = useState(initialMode || "password"); // 'password' | 'magic-link' | 'forgot-password' | 'set-new-password'
   const [forgotStep, setForgotStep] = useState("request"); // 'request' | 'verify'
@@ -54,7 +144,7 @@ export default function AdminLogin({ initialMode }) {
     };
   }, [navigate, location, authMode]);
 
-  // Resend cooldown timer
+  // Resend cooldown countdown timer
   useEffect(() => {
     if (resendCooldown <= 0) return;
     const timer = setInterval(() => {
@@ -67,6 +157,29 @@ export default function AdminLogin({ initialMode }) {
     const trimmed = (inputEmail || email).trim();
     if (!trimmed) return "";
     return trimmed.includes("@") ? trimmed : `${trimmed}@etcforum.com`;
+  };
+
+  const validatePasswordMatch = (pwd, confirmPwd) => {
+    if (pwd.length < 8) {
+      return "New password must be at least 8 characters long.";
+    }
+    if (pwd !== confirmPwd) {
+      return "New password and confirm password do not match.";
+    }
+    return null;
+  };
+
+  const handlePasswordSuccess = () => {
+    setMessage("Password successfully changed! Redirecting to dashboard…");
+    setTimeout(() => {
+      navigate("/admin", { replace: true });
+    }, 1500);
+  };
+
+  const handleBackToSignIn = () => {
+    setAuthMode("password");
+    setError("");
+    setMessage("");
   };
 
   // 1. Password or Magic Link Login
@@ -164,20 +277,14 @@ export default function AdminLogin({ initialMode }) {
       return;
     }
 
-    if (newPassword.length < 8) {
-      setError("New password must be at least 8 characters long.");
-      setSubmitting(false);
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      setError("New password and confirm password do not match.");
+    const validationError = validatePasswordMatch(newPassword, confirmPassword);
+    if (validationError) {
+      setError(validationError);
       setSubmitting(false);
       return;
     }
 
     try {
-      // Step A: Verify OTP with recovery type
       const { error: otpError } = await supabase.auth.verifyOtp({
         email: normalizedEmail,
         token: otpCode.trim(),
@@ -186,17 +293,13 @@ export default function AdminLogin({ initialMode }) {
 
       if (otpError) throw otpError;
 
-      // Step B: Set the new password
       const { error: updateError } = await supabase.auth.updateUser({
         password: newPassword,
       });
 
       if (updateError) throw updateError;
 
-      setMessage("Password successfully changed! Redirecting to dashboard…");
-      setTimeout(() => {
-        navigate("/admin", { replace: true });
-      }, 1500);
+      handlePasswordSuccess();
     } catch (err) {
       setError(err.message || "Invalid or expired verification code. Please try again.");
     } finally {
@@ -204,21 +307,16 @@ export default function AdminLogin({ initialMode }) {
     }
   };
 
-  // 4. Update Password (from email link redirect)
+  // 4. Update Password (from direct email link redirect)
   const handleSetNewPasswordDirect = async (event) => {
     event.preventDefault();
     setSubmitting(true);
     setError("");
     setMessage("");
 
-    if (newPassword.length < 8) {
-      setError("New password must be at least 8 characters long.");
-      setSubmitting(false);
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      setError("New password and confirm password do not match.");
+    const validationError = validatePasswordMatch(newPassword, confirmPassword);
+    if (validationError) {
+      setError(validationError);
       setSubmitting(false);
       return;
     }
@@ -230,14 +328,11 @@ export default function AdminLogin({ initialMode }) {
 
       if (updateError) throw updateError;
 
-      setMessage("Password updated successfully! Redirecting to dashboard…");
-      setTimeout(() => {
-        navigate("/admin", { replace: true });
-      }, 1500);
+      handlePasswordSuccess();
     } catch (err) {
       setError(
         err.message ||
-        "Session expired or invalid. Please request a new password reset email."
+          "Session expired or invalid. Please request a new password reset email."
       );
     } finally {
       setSubmitting(false);
@@ -277,14 +372,14 @@ export default function AdminLogin({ initialMode }) {
         ) : (
           <>
             <p className="admin-kicker">ETC Forum Portal</p>
-            <h1>Workspace Sign In</h1>
+            <h1>Sign In</h1>
             <p className="admin-description">
               Connected to production Supabase cloud database with encrypted session tokens and Row Level Security.
             </p>
           </>
         )}
 
-        {/* Mode Selector (Login vs Magic Link) only when in sign-in modes */}
+        {/* Mode Selector (Login vs Magic Link) */}
         {(authMode === "password" || authMode === "magic-link") && (
           <div
             style={{
@@ -386,39 +481,16 @@ export default function AdminLogin({ initialMode }) {
 
             {authMode === "password" && (
               <div>
-                <label>
-                  Password
-                  <div style={{ position: "relative" }}>
-                    <input
-                      autoComplete="current-password"
-                      name="password"
-                      required
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      style={{ width: "100%", paddingRight: "44px" }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      style={{
-                        position: "absolute",
-                        right: "10px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        color: "#64748b",
-                        fontSize: "11px",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {showPassword ? "HIDE" : "SHOW"}
-                    </button>
-                  </div>
-                </label>
+                <PasswordInput
+                  label="Password"
+                  name="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  show={showPassword}
+                  onToggleShow={() => setShowPassword((prev) => !prev)}
+                  autoComplete="current-password"
+                />
 
                 {/* Forgot Password Link */}
                 <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "6px" }}>
@@ -480,11 +552,7 @@ export default function AdminLogin({ initialMode }) {
             <div style={{ textAlign: "center", marginTop: "10px" }}>
               <button
                 type="button"
-                onClick={() => {
-                  setAuthMode("password");
-                  setError("");
-                  setMessage("");
-                }}
+                onClick={handleBackToSignIn}
                 style={{
                   background: "none",
                   border: "none",
@@ -553,50 +621,14 @@ export default function AdminLogin({ initialMode }) {
               />
             </label>
 
-            <label>
-              New Password
-              <div style={{ position: "relative" }}>
-                <input
-                  type={showNewPassword ? "text" : "password"}
-                  name="newPassword"
-                  required
-                  placeholder="At least 8 characters"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  style={{ width: "100%", paddingRight: "44px" }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                  style={{
-                    position: "absolute",
-                    right: "10px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    color: "#64748b",
-                    fontSize: "11px",
-                    fontWeight: 600,
-                  }}
-                >
-                  {showNewPassword ? "HIDE" : "SHOW"}
-                </button>
-              </div>
-            </label>
-
-            <label>
-              Confirm New Password
-              <input
-                type={showNewPassword ? "text" : "password"}
-                name="confirmPassword"
-                required
-                placeholder="Re-enter new password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </label>
+            <NewPasswordInputs
+              newPassword={newPassword}
+              setNewPassword={setNewPassword}
+              confirmPassword={confirmPassword}
+              setConfirmPassword={setConfirmPassword}
+              show={showNewPassword}
+              onToggleShow={() => setShowNewPassword((prev) => !prev)}
+            />
 
             <button className="admin-button admin-button-wide" type="submit" disabled={submitting}>
               {submitting ? "Verifying & Updating…" : "Verify Code & Change Password"}
@@ -629,11 +661,7 @@ export default function AdminLogin({ initialMode }) {
 
               <button
                 type="button"
-                onClick={() => {
-                  setAuthMode("password");
-                  setError("");
-                  setMessage("");
-                }}
+                onClick={handleBackToSignIn}
                 style={{
                   background: "none",
                   border: "none",
@@ -651,50 +679,14 @@ export default function AdminLogin({ initialMode }) {
         {/* -------------------- FORM 4: Set New Password Direct (from Email Link) -------------------- */}
         {authMode === "set-new-password" && (
           <form className="admin-form" onSubmit={handleSetNewPasswordDirect}>
-            <label>
-              New Password
-              <div style={{ position: "relative" }}>
-                <input
-                  type={showNewPassword ? "text" : "password"}
-                  name="newPassword"
-                  required
-                  placeholder="At least 8 characters"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  style={{ width: "100%", paddingRight: "44px" }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                  style={{
-                    position: "absolute",
-                    right: "10px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    color: "#64748b",
-                    fontSize: "11px",
-                    fontWeight: 600,
-                  }}
-                >
-                  {showNewPassword ? "HIDE" : "SHOW"}
-                </button>
-              </div>
-            </label>
-
-            <label>
-              Confirm New Password
-              <input
-                type={showNewPassword ? "text" : "password"}
-                name="confirmPassword"
-                required
-                placeholder="Re-enter new password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </label>
+            <NewPasswordInputs
+              newPassword={newPassword}
+              setNewPassword={setNewPassword}
+              confirmPassword={confirmPassword}
+              setConfirmPassword={setConfirmPassword}
+              show={showNewPassword}
+              onToggleShow={() => setShowNewPassword((prev) => !prev)}
+            />
 
             <button className="admin-button admin-button-wide" type="submit" disabled={submitting}>
               {submitting ? "Updating Password…" : "Update Password & Sign In"}
@@ -703,11 +695,7 @@ export default function AdminLogin({ initialMode }) {
             <div style={{ textAlign: "center", marginTop: "10px" }}>
               <button
                 type="button"
-                onClick={() => {
-                  setAuthMode("password");
-                  setError("");
-                  setMessage("");
-                }}
+                onClick={handleBackToSignIn}
                 style={{
                   background: "none",
                   border: "none",

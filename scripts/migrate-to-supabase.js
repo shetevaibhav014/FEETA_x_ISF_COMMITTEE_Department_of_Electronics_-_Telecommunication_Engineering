@@ -68,6 +68,8 @@ async function migrate() {
     .eq("status", "published")
     .eq("visible", true);
 
+  if (publicError) throw publicError;
+
   console.log("   Public content query successful! Rows found:", publicRows?.length);
   console.log("=== Migration to Supabase Complete ===");
 }

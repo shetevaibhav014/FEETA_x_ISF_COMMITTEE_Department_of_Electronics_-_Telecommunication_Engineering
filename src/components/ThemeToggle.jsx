@@ -6,7 +6,7 @@ export default function ThemeToggle({
   showLabel = true,
   variant = "pill", // 'pill' or 'circle'
 }) {
-  const { theme, toggleTheme, isDark } = useTheme();
+  const { toggleTheme, isDark } = useTheme();
 
   if (variant === "circle" || !showLabel) {
     return (

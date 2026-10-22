@@ -72,8 +72,8 @@ const defaultAdmins = [
   { id: "divyanidaware.etc24@sbjit.edu.in", password: "divyani@etc24", role: "admin" },
 ];
 
-const adminId = process.env.ADMIN_ID || defaultAdmins[0].id;
-const adminPassword = process.env.ADMIN_PASSWORD || defaultAdmins[0].password;
+if (process.env.ADMIN_ID) defaultAdmins[0].id = process.env.ADMIN_ID;
+if (process.env.ADMIN_PASSWORD) defaultAdmins[0].password = process.env.ADMIN_PASSWORD;
 
 db.prepare("DELETE FROM users WHERE id NOT IN (?, ?, ?, ?, ?)")
   .run(...defaultAdmins.map((a) => a.id));
