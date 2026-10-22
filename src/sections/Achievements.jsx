@@ -1,3 +1,6 @@
+import React from "react";
+import { useTheme } from "../context/ThemeContext";
+
 const achievements = [
   {
     icon: "🏆",
@@ -23,67 +26,76 @@ const achievements = [
     description:
       "Creating opportunities for students to develop practical skills and explore emerging technologies.",
   },
-]
+];
 
 function Achievements() {
+  const { isDark } = useTheme();
+
   return (
     <section
       id="achievements"
-      className="bg-slate-50 px-6 py-24"
+      className="px-6 py-28 transition-colors duration-300 relative bg-[var(--bg-page)] text-[var(--text-primary)]"
     >
       <div className="mx-auto max-w-7xl">
+        {/* Auron Section Header */}
+        <div className="section-header max-w-3xl mx-auto">
+          <span className="section-subtitle">Our Achievements</span>
 
-        {/* Heading */}
-        <div className="mx-auto max-w-3xl text-center">
-
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">
-            Our Achievements
-          </p>
-
-          <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-            Learning,
-            <span className="text-blue-600"> Innovation & Excellence</span>
+          <h2 className="section-title">
+            Innovation & <span className="text-gold-gradient">Excellence</span>
           </h2>
 
-          <p className="mt-6 text-lg leading-8 text-slate-600">
-            Celebrating the efforts, creativity and accomplishments
-            of students from the ETC Department Forum.
+          <p
+            className={`mt-4 text-base sm:text-lg leading-relaxed transition-colors max-w-2xl mx-auto ${
+              isDark ? "text-[#abc4e3]" : "text-[#4a5568]"
+            }`}
+          >
+            Celebrating the efforts, creativity and accomplishments of students
+            from the ETC Department Forum.
           </p>
-
         </div>
 
-        {/* Achievement Cards */}
+        {/* Auron Glass Cards */}
         <div className="mx-auto mt-16 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
-
           {achievements.map((achievement) => (
             <div
               key={achievement.title}
-              className="group rounded-2xl border border-slate-200 bg-white p-7 text-center transition duration-300 hover:-translate-y-2 hover:border-blue-300 hover:shadow-xl"
+              className="glass-card p-7 text-center group flex flex-col justify-between"
             >
+              <div>
+                {/* Icon */}
+                <div
+                  className={`mx-auto flex h-16 w-16 items-center justify-center rounded-2xl text-3xl border transition-all duration-300 group-hover:scale-110 ${
+                    isDark
+                      ? "bg-[#3b9cff15] border-[#3b9cff33] text-[#3b9cff] shadow-[0_0_15px_rgba(59,156,255,0.2)]"
+                      : "bg-[#0d47a10f] border-[#0d47a126] text-[#0d47a1]"
+                  }`}
+                >
+                  {achievement.icon}
+                </div>
 
-              {/* Icon */}
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-3xl transition duration-300 group-hover:bg-blue-600">
-                {achievement.icon}
+                {/* Title */}
+                <h3
+                  className="mt-6 text-xl font-bold font-heading transition-colors text-[var(--text-heading)] group-hover:text-[var(--color-gold)]"
+                >
+                  {achievement.title}
+                </h3>
+
+                {/* Description */}
+                <p
+                  className={`mt-3 text-sm leading-relaxed transition-colors ${
+                    isDark ? "text-[#abc4e3]" : "text-[#4a5568]"
+                  }`}
+                >
+                  {achievement.description}
+                </p>
               </div>
-
-              {/* Title */}
-              <h3 className="mt-6 text-xl font-bold text-slate-900">
-                {achievement.title}
-              </h3>
-
-              {/* Description */}
-              <p className="mt-3 text-sm leading-6 text-slate-600">
-                {achievement.description}
-              </p>
-
             </div>
           ))}
-
         </div>
-
       </div>
     </section>
-  )
+  );
 }
 
-export default Achievements
+export default Achievements;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 
 const installationPhotos = [
   { id: 1, image: "/installation-ceremony/a.jpeg", title: "Guests & Honored Dignitaries", category: "Installation - 2026", date: "AUG 25, 2026" },
@@ -10,6 +11,7 @@ const installationPhotos = [
 ];
 
 export default function InstallationGallery() {
+  const { isDark } = useTheme();
   const [activePhoto, setActivePhoto] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef(null);
@@ -58,47 +60,95 @@ export default function InstallationGallery() {
   }, [activePhoto]);
 
   return (
-    <section className="relative w-full min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between pt-20 sm:pt-24 lg:pt-28 pb-8 sm:pb-12 overflow-x-hidden font-sans">
-      
-      {/* Light Mesh Gradients */}
+    <section
+      className={`relative w-full min-h-screen flex flex-col justify-between pt-20 sm:pt-24 lg:pt-28 pb-8 sm:pb-12 overflow-x-hidden transition-colors duration-300 ${
+        isDark ? "bg-[#030712] text-white" : "bg-slate-50 text-slate-900"
+      }`}
+    >
+      {/* Light / Dark Mesh Gradients */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-200/60 rounded-full blur-[120px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] bg-indigo-100/70 rounded-full blur-[140px]" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-sky-200/60 rounded-full blur-[120px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f080_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f080_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
+        <div
+          className={`absolute -top-40 -left-40 w-96 h-96 rounded-full blur-[120px] ${
+            isDark ? "bg-cyan-950/40" : "bg-blue-200/60"
+          }`}
+        />
+        <div
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] rounded-full blur-[140px] ${
+            isDark ? "bg-blue-950/30" : "bg-indigo-100/70"
+          }`}
+        />
+        <div
+          className={`absolute -bottom-40 -right-40 w-96 h-96 rounded-full blur-[120px] ${
+            isDark ? "bg-cyan-900/30" : "bg-sky-200/60"
+          }`}
+        />
+        <div
+          className={`absolute inset-0 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] ${
+            isDark
+              ? "bg-[linear-gradient(to_right,#1e293b50_1px,transparent_1px),linear-gradient(to_bottom,#1e293b50_1px,transparent_1px)] bg-[size:4rem_4rem]"
+              : "bg-[linear-gradient(to_right,#e2e8f080_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f080_1px,transparent_1px)] bg-[size:4rem_4rem]"
+          }`}
+        />
       </div>
 
       {/* Header Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-row items-center justify-between gap-4 z-10 mb-6 sm:mb-8">
         <div>
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-            <p className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-[0.25em] text-blue-600">
+            <span
+              className={`h-2 w-2 rounded-full animate-pulse ${
+                isDark ? "bg-cyan-400" : "bg-blue-600"
+              }`}
+            />
+            <p
+              className={`text-[10px] sm:text-xs font-mono font-bold uppercase tracking-[0.25em] transition-colors ${
+                isDark ? "text-cyan-400" : "text-blue-600"
+              }`}
+            >
               Installation Ceremony
             </p>
           </div>
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 mt-1">
-            Event <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-600">Gallery</span>
+          <h1
+            className={`text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight mt-1 transition-colors ${
+              isDark ? "text-white" : "text-slate-900"
+            }`}
+          >
+            Event{" "}
+            <span
+              className={
+                isDark
+                  ? "bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent"
+                  : "bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-600 bg-clip-text text-transparent"
+              }
+            >
+              Gallery
+            </span>
           </h1>
         </div>
 
         <Link
           to="/"
-          className="group relative inline-flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 bg-white/80 border border-slate-200 rounded-xl backdrop-blur-md hover:border-blue-400 hover:text-blue-600 transition-all duration-300 shadow-md shadow-slate-200/50 shrink-0 overflow-hidden"
+          className={`group relative inline-flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl backdrop-blur-md transition-all duration-300 shadow-md shrink-0 overflow-hidden border ${
+            isDark
+              ? "text-slate-300 bg-slate-900/80 border-slate-700 hover:border-cyan-400 hover:text-cyan-300 shadow-black/50"
+              : "text-slate-700 bg-white/80 border-slate-200 hover:border-blue-400 hover:text-blue-600 shadow-slate-200/50"
+          }`}
         >
-          <span className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 opacity-0 group-hover:opacity-100 transition-opacity" />
           ← <span className="hidden xs:inline">Back to</span> Home
         </Link>
       </div>
 
       {/* Horizontal Interactive Carousel Container */}
       <div className="relative my-auto w-full group/carousel z-10">
-        
         {/* Navigation Buttons (Desktop) */}
         <button
           onClick={handlePrev}
           aria-label="Previous Slide"
-          className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-30 hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-blue-600 border border-slate-200 backdrop-blur-md opacity-0 group-hover/carousel:opacity-100 transition-all duration-300 hover:bg-blue-600 hover:text-white hover:border-blue-600 shadow-xl hover:scale-110 text-2xl font-bold"
+          className={`absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-30 hidden sm:flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-md opacity-0 group-hover/carousel:opacity-100 transition-all duration-300 shadow-xl hover:scale-110 text-2xl font-bold border ${
+            isDark
+              ? "bg-slate-900/90 text-cyan-400 border-slate-700 hover:bg-cyan-500 hover:text-white hover:border-cyan-500"
+              : "bg-white/90 text-blue-600 border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600"
+          }`}
         >
           ‹
         </button>
@@ -106,7 +156,11 @@ export default function InstallationGallery() {
         <button
           onClick={handleNext}
           aria-label="Next Slide"
-          className="absolute right-4 lg:left-auto lg:right-8 top-1/2 -translate-y-1/2 z-30 hidden sm:flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-blue-600 border border-slate-200 backdrop-blur-md opacity-0 group-hover/carousel:opacity-100 transition-all duration-300 hover:bg-blue-600 hover:text-white hover:border-blue-600 shadow-xl hover:scale-110 text-2xl font-bold"
+          className={`absolute right-4 lg:left-auto lg:right-8 top-1/2 -translate-y-1/2 z-30 hidden sm:flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-md opacity-0 group-hover/carousel:opacity-100 transition-all duration-300 shadow-xl hover:scale-110 text-2xl font-bold border ${
+            isDark
+              ? "bg-slate-900/90 text-cyan-400 border-slate-700 hover:bg-cyan-500 hover:text-white hover:border-cyan-500"
+              : "bg-white/90 text-blue-600 border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600"
+          }`}
         >
           ›
         </button>
@@ -125,7 +179,11 @@ export default function InstallationGallery() {
             >
               <div
                 onClick={() => setActivePhoto(photo)}
-                className="group relative h-[340px] xs:h-[380px] sm:h-[400px] md:h-[440px] lg:h-[480px] w-full cursor-pointer overflow-hidden rounded-2xl bg-white border border-slate-200/80 shadow-lg shadow-slate-200/60 transition-all duration-500 hover:border-blue-400 hover:shadow-2xl hover:shadow-blue-500/15 hover:-translate-y-1.5"
+                className={`group relative h-[340px] xs:h-[380px] sm:h-[400px] md:h-[440px] lg:h-[480px] w-full cursor-pointer overflow-hidden rounded-2xl border transition-all duration-500 hover:-translate-y-1.5 ${
+                  isDark
+                    ? "bg-slate-900 border-slate-800 shadow-lg shadow-black/50 hover:border-cyan-500 hover:shadow-cyan-500/20"
+                    : "bg-white border-slate-200/80 shadow-lg shadow-slate-200/60 hover:border-blue-400 hover:shadow-blue-500/15"
+                }`}
               >
                 {/* Photo */}
                 <img
@@ -167,7 +225,11 @@ export default function InstallationGallery() {
             aria-label={`Go to slide ${index + 1}`}
             className={`h-2 transition-all duration-300 rounded-full ${
               activeIndex === index
-                ? "w-8 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md shadow-blue-500/30"
+                ? isDark
+                  ? "w-8 bg-gradient-to-r from-blue-500 to-cyan-400 shadow-md shadow-cyan-500/30"
+                  : "w-8 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md shadow-blue-500/30"
+                : isDark
+                ? "w-2 bg-slate-700 hover:bg-slate-600"
                 : "w-2 bg-slate-300 hover:bg-slate-400"
             }`}
           />
@@ -177,13 +239,17 @@ export default function InstallationGallery() {
       {/* Lightbox Modal */}
       {activePhoto && (
         <div
-          className="fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/60 p-4 sm:p-8 backdrop-blur-md animate-in fade-in duration-300"
+          className="fixed inset-0 z-[150] flex items-center justify-center bg-slate-950/80 p-4 sm:p-8 backdrop-blur-md animate-in fade-in duration-300"
           onClick={() => setActivePhoto(null)}
         >
           {/* Close Modal Button */}
           <button
             onClick={() => setActivePhoto(null)}
-            className="absolute top-6 right-6 flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-700 text-lg border border-slate-200 hover:bg-blue-600 hover:text-white transition-all z-20 shadow-xl"
+            className={`absolute top-6 right-6 flex h-10 w-10 items-center justify-center rounded-full text-lg border transition-all z-20 shadow-xl ${
+              isDark
+                ? "bg-slate-800 text-slate-300 border-slate-700 hover:bg-cyan-600 hover:text-white"
+                : "bg-white text-slate-700 border-slate-200 hover:bg-blue-600 hover:text-white"
+            }`}
             aria-label="Close Preview"
           >
             ✕
@@ -193,7 +259,11 @@ export default function InstallationGallery() {
             className="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative p-1.5 rounded-2xl bg-white border border-slate-200 shadow-2xl">
+            <div
+              className={`relative p-1.5 rounded-2xl border shadow-2xl ${
+                isDark ? "bg-slate-900 border-slate-700" : "bg-white border-slate-200"
+              }`}
+            >
               <img
                 src={activePhoto.image}
                 alt={activePhoto.title}
@@ -204,14 +274,19 @@ export default function InstallationGallery() {
               <span className="text-[10px] font-mono font-semibold uppercase tracking-widest text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full shadow-sm">
                 {activePhoto.category}
               </span>
-              <p className="text-lg sm:text-xl font-bold text-slate-900 tracking-wide bg-white/80 px-4 py-1 rounded-lg border border-slate-200/60 backdrop-blur-sm shadow-sm mt-1">
+              <p
+                className={`text-lg sm:text-xl font-bold tracking-wide px-4 py-1 rounded-lg border backdrop-blur-sm shadow-sm mt-1 ${
+                  isDark
+                    ? "text-white bg-slate-900/90 border-slate-700"
+                    : "text-slate-900 bg-white/80 border-slate-200/60"
+                }`}
+              >
                 {activePhoto.title}
               </p>
             </div>
           </div>
         </div>
       )}
-
     </section>
   );
 }

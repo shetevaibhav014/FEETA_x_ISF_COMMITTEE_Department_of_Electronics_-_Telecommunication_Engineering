@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { FaLinkedin } from "react-icons/fa";
+import { useTheme } from "../context/ThemeContext";
 
 const mentorsData = [
   {
@@ -33,6 +34,7 @@ const mentorsData = [
 ];
 
 function Mentors() {
+  const { isDark } = useTheme();
   const containerRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -60,17 +62,34 @@ function Mentors() {
   };
 
   return (
-    <section id="mentors" className="bg-slate-50 py-12 px-4 sm:py-16 sm:px-6">
+    <section
+      id="mentors"
+      className={`py-12 px-4 sm:py-16 sm:px-6 transition-colors duration-300 ${
+        isDark ? "bg-[#050b18] text-white" : "bg-slate-50 text-slate-900"
+      }`}
+    >
       <div className="mx-auto max-w-7xl">
         {/* Section Heading */}
         <div className="text-center">
-          <p className="mb-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">
+          <p
+            className={`mb-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] transition-colors ${
+              isDark ? "text-cyan-400" : "text-blue-600"
+            }`}
+          >
             Guidance & Support
           </p>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          <h2
+            className={`text-2xl font-bold tracking-tight sm:text-4xl transition-colors ${
+              isDark ? "text-white" : "text-slate-900"
+            }`}
+          >
             Our Mentors
           </h2>
-          <p className="mt-2 text-xs sm:text-sm text-slate-600">
+          <p
+            className={`mt-2 text-xs sm:text-sm transition-colors ${
+              isDark ? "text-slate-400" : "text-slate-600"
+            }`}
+          >
             Guiding light and leadership for the ETC forum
           </p>
         </div>
@@ -88,31 +107,55 @@ function Mentors() {
             {mentorsData.map((mentor, index) => (
               <div
                 key={index}
-                className="w-[80vw] sm:w-auto shrink-0 sm:shrink bg-white rounded-2xl p-6 shadow-md border border-slate-100 text-center flex flex-col items-center transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
+                className={`w-[80vw] sm:w-auto shrink-0 sm:shrink rounded-2xl p-6 shadow-md border text-center flex flex-col items-center transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl ${
+                  isDark
+                    ? "bg-slate-900/80 border-slate-800 text-white hover:border-cyan-500/50"
+                    : "bg-white border-slate-100 text-slate-900 hover:border-blue-100"
+                }`}
                 style={{ scrollSnapAlign: "center" }}
               >
                 {/* Mentor Photo */}
                 <img
                   src={mentor.image}
                   alt={mentor.name}
-                  className="h-24 w-24 sm:h-28 sm:w-28 rounded-full object-cover ring-4 ring-blue-50 shadow-sm mb-4"
+                  className={`h-24 w-24 sm:h-28 sm:w-28 rounded-full object-cover shadow-sm mb-4 ring-4 ${
+                    isDark ? "ring-cyan-500/20" : "ring-blue-50"
+                  }`}
                 />
 
                 {/* Name & Details */}
-                <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                <h3
+                  className={`text-base sm:text-lg font-bold transition-colors ${
+                    isDark ? "text-white" : "text-slate-900"
+                  }`}
+                >
                   {mentor.name}
                 </h3>
-                <p className="text-xs sm:text-sm font-medium text-blue-600">
+                <p
+                  className={`text-xs sm:text-sm font-medium transition-colors ${
+                    isDark ? "text-cyan-400" : "text-blue-600"
+                  }`}
+                >
                   {mentor.position}
                 </p>
-                <p className="text-xs text-slate-500 mt-1">{mentor.year}</p>
+                <p
+                  className={`text-xs mt-1 transition-colors ${
+                    isDark ? "text-slate-400" : "text-slate-500"
+                  }`}
+                >
+                  {mentor.year}
+                </p>
 
                 {/* Clickable LinkedIn Link */}
                 <a
                   href={mentor.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-4 flex items-center justify-center h-10 w-10 rounded-full bg-slate-50 text-slate-500 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm"
+                  className={`mt-4 flex items-center justify-center h-10 w-10 rounded-full transition-all duration-300 shadow-sm ${
+                    isDark
+                      ? "bg-slate-800 text-slate-300 hover:bg-cyan-600 hover:text-white"
+                      : "bg-slate-50 text-slate-500 hover:bg-blue-600 hover:text-white"
+                  }`}
                   aria-label={`${mentor.name}'s LinkedIn Profile`}
                 >
                   <FaLinkedin className="h-5 w-5" />
@@ -126,7 +169,11 @@ function Mentors() {
         <div className="mt-4 sm:hidden flex justify-center items-center gap-3">
           <span
             onClick={handlePrev}
-            className="cursor-pointer text-2xl font-bold tracking-tighter text-slate-500 transition-all duration-300 hover:text-blue-600 active:scale-90 select-none px-2 py-1"
+            className={`cursor-pointer text-2xl font-bold tracking-tighter transition-all duration-300 active:scale-90 select-none px-2 py-1 ${
+              isDark
+                ? "text-slate-400 hover:text-cyan-400"
+                : "text-slate-500 hover:text-blue-600"
+            }`}
             aria-label="Previous Mentors"
             role="button"
             tabIndex={0}
@@ -134,13 +181,21 @@ function Mentors() {
             &lt;&lt;
           </span>
 
-          <span className="text-slate-300 font-light tracking-tighter select-none">
+          <span
+            className={`font-light tracking-tighter select-none ${
+              isDark ? "text-slate-600" : "text-slate-300"
+            }`}
+          >
             • • • • •
           </span>
 
           <span
             onClick={handleNext}
-            className="cursor-pointer text-2xl font-bold tracking-tighter text-slate-500 transition-all duration-300 hover:text-blue-600 active:scale-90 select-none px-2 py-1"
+            className={`cursor-pointer text-2xl font-bold tracking-tighter transition-all duration-300 active:scale-90 select-none px-2 py-1 ${
+              isDark
+                ? "text-slate-400 hover:text-cyan-400"
+                : "text-slate-500 hover:text-blue-600"
+            }`}
             aria-label="Next Mentors"
             role="button"
             tabIndex={0}

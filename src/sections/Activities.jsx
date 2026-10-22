@@ -1,4 +1,5 @@
-import React from "react"
+import React from "react";
+import { useTheme } from "../context/ThemeContext";
 
 const activities = [
   {
@@ -37,58 +38,74 @@ const activities = [
     description:
       "Creating opportunities for students to collaborate, lead events and turn their ideas into reality.",
   },
-]
+];
 
 export default function Activities() {
-  return (
-    <section id="activities" className="bg-slate-950 px-6 py-24 text-white">
-      <div className="mx-auto max-w-7xl">
-        {/* Header */}
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-3 text-sm font-semibold tracking-wide text-blue-400">
-            WHAT WE DO
-          </p>
+  const { isDark } = useTheme();
 
-          <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
-            Our{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              Activities
-            </span>
+  return (
+    <section
+      id="activities"
+      className="px-6 py-28 transition-colors duration-300 relative bg-[var(--bg-page-alt)] text-[var(--text-primary)]"
+    >
+      <div className="mx-auto max-w-7xl">
+        {/* Auron Section Header */}
+        <div className="section-header max-w-3xl mx-auto">
+          <span className="section-subtitle">What We Do</span>
+
+          <h2 className="section-title">
+            Our <span className="text-gold-gradient">Activities</span>
           </h2>
 
-          <p className="mt-6 text-base leading-8 text-slate-400 sm:text-lg">
+          <p
+            className={`mt-4 text-base sm:text-lg leading-relaxed transition-colors max-w-2xl mx-auto ${
+              isDark ? "text-[#abc4e3]" : "text-[#4a5568]"
+            }`}
+          >
             From technical workshops to competitions and innovation projects,
             the ETC Forum provides students with opportunities to learn, build,
             and lead.
           </p>
         </div>
 
-        {/* Activity Cards */}
+        {/* Auron Glass Cards Grid */}
         <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {activities.map((activity) => (
             <div
               key={activity.title}
-              className="group relative rounded-2xl border border-slate-800 bg-slate-900/60 p-8 backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-blue-500/50 hover:bg-slate-900/90"
+              className="glass-card p-8 group flex flex-col justify-between"
             >
-              {/* Icon Container with ARIA guard */}
-              <div
-                aria-hidden="true"
-                className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl border border-blue-500/20 bg-blue-950/40 text-2xl transition-transform duration-300 group-hover:scale-110"
-              >
-                {activity.icon}
+              <div>
+                {/* Icon Container */}
+                <div
+                  aria-hidden="true"
+                  className={`mb-6 flex h-14 w-14 items-center justify-center rounded-2xl text-2xl border transition-all duration-300 group-hover:scale-110 ${
+                    isDark
+                      ? "bg-[#3b9cff15] border-[#3b9cff33] text-[#3b9cff] shadow-[0_0_15px_rgba(59,156,255,0.2)]"
+                      : "bg-[#0d47a10f] border-[#0d47a126] text-[#0d47a1]"
+                  }`}
+                >
+                  {activity.icon}
+                </div>
+
+                <h3
+                  className="text-xl font-bold font-heading mb-3 transition-colors text-[var(--text-heading)] group-hover:text-[var(--color-gold)]"
+                >
+                  {activity.title}
+                </h3>
+
+                <p
+                  className={`text-sm sm:text-base leading-relaxed transition-colors ${
+                    isDark ? "text-[#abc4e3]" : "text-[#4a5568]"
+                  }`}
+                >
+                  {activity.description}
+                </p>
               </div>
-
-              <h3 className="text-xl font-bold text-white transition-colors duration-200 group-hover:text-blue-400">
-                {activity.title}
-              </h3>
-
-              <p className="mt-3 text-sm leading-7 text-slate-400 sm:text-base">
-                {activity.description}
-              </p>
             </div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

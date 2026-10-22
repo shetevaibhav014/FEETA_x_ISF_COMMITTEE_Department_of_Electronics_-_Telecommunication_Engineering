@@ -1,130 +1,181 @@
-import { useEffect, useRef, useState } from "react"
-import { NavLink, Link } from "react-router-dom"
+import { useEffect, useRef, useState } from "react";
+import { NavLink, Link } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
+import ThemeToggle from "./ThemeToggle";
 
-// Route paths map 1:1 to the pages/sections you already have:
-// Home -> Hero, About Us -> About, Committee In-Charge -> CommitteeIncharge,
-// Activities -> Activities, Events -> Events, Gallery -> Gallery,
-// Achievements -> Achievements, Team -> Team
 const links = [
   { name: "Home", to: "/" },
   { name: "About Us", to: "/about" },
-  { name: "Committee In-Charge", to: "/committee-incharge" },
+  { name: "In-Charge", to: "/committee-incharge" },
   { name: "Activities", to: "/activities" },
   { name: "Events", to: "/events" },
   { name: "Gallery", to: "/gallery" },
   { name: "Achievements", to: "/achievements" },
   { name: "Team", to: "/team" },
-]
+];
 
 function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const menuButtonRef = useRef(null)
-  const firstMobileLinkRef = useRef(null)
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const menuButtonRef = useRef(null);
+  const firstMobileLinkRef = useRef(null);
+  const { isDark } = useTheme();
 
-  const closeMenu = () => setMenuOpen(false)
+  const closeMenu = () => setMenuOpen(false);
+
+  // Scroll detection for Auron's sleek condensed navbar effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Close on Escape and return focus to the toggle button (keyboard accessibility)
   useEffect(() => {
-    if (!menuOpen) return
+    if (!menuOpen) return;
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
-        setMenuOpen(false)
-        menuButtonRef.current?.focus()
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
       }
-    }
+    };
 
-    document.addEventListener("keydown", handleKeyDown)
-    // Move focus into the open menu so keyboard users land somewhere sensible
-    firstMobileLinkRef.current?.focus()
+    document.addEventListener("keydown", handleKeyDown);
+    firstMobileLinkRef.current?.focus();
 
-    return () => document.removeEventListener("keydown", handleKeyDown)
-  }, [menuOpen])
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [menuOpen]);
 
-  // Close the mobile menu automatically if the viewport grows into desktop size
+  // Close mobile menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) setMenuOpen(false)
-    }
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
+      if (window.innerWidth >= 1024) setMenuOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const desktopLinkClass = ({ isActive }) =>
-    `text-sm font-medium transition ${
-      isActive ? "text-blue-600" : "text-slate-600 hover:text-blue-600"
-    }`
+    `relative text-[0.78rem] tracking-[1.5px] uppercase font-semibold py-1.5 transition-all duration-300 ${isActive
+      ? isDark
+        ? "text-[#3b9cff] drop-shadow-[0_0_8px_rgba(59,156,255,0.5)] after:w-full after:shadow-[0_0_8px_#3b9cff]"
+        : "text-[#0d47a1] font-bold after:w-full"
+      : isDark
+        ? "text-[#abc4e3] hover:text-white hover:drop-shadow-[0_0_6px_rgba(59,156,255,0.3)] after:w-0 hover:after:w-full"
+        : "text-[#2c3e5a] hover:text-[#0d47a1] after:w-0 hover:after:w-full"
+    } after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-[var(--gold-gradient)] after:transition-all after:duration-300`;
 
   const mobileLinkClass = ({ isActive }) =>
-    `border-b border-slate-100 py-3 text-sm font-medium transition ${
-      isActive ? "text-blue-600" : "text-slate-700 hover:text-blue-600"
-    }`
+    `border-b py-3 text-sm font-semibold tracking-wide uppercase transition-colors ${isDark ? "border-[#3b9cff1a]" : "border-[#0d47a114]"
+    } ${isActive
+      ? isDark
+        ? "text-[#3b9cff] font-bold"
+        : "text-[#0d47a1] font-bold"
+      : isDark
+        ? "text-[#abc4e3] hover:text-[#3b9cff]"
+        : "text-[#2c3e5a] hover:text-[#0d47a1]"
+    }`;
 
   return (
     <nav
-      className="fixed left-0 top-0 z-50 w-full border-b border-slate-200 bg-white/90 shadow-sm backdrop-blur-md"
+      className={`fixed left-0 top-0 z-50 w-full backdrop-blur-xl border-b transition-all duration-300 ${isScrolled ? "h-16 shadow-lg shadow-black/20" : "h-18"
+        } ${isDark
+          ? "border-[#3b9cff1a] bg-[#020b18cc]"
+          : "border-[#0d47a114] bg-[#ffffffd9] shadow-sm"
+        }`}
       aria-label="Primary"
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3">
-
-        {/* FEETA Logo */}
+      <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6">
+        {/* FEETA Logo & Auron-Style Title */}
         <Link
-          to="/"
-          className="flex min-w-0 items-center gap-2 sm:gap-3"
+          to="/admin/login"
+          className="flex min-w-0 items-center gap-3 group"
           onClick={closeMenu}
-          aria-label="FEETA Home"
+          aria-label="Open ETC administration login"
+          title="Admin login"
         >
-          <img
-            src="/forumlogo.png"
-            alt="FEETA Logo"
-            className="h-9 w-9 shrink-0 object-contain sm:h-10 sm:w-10 md:h-12 md:w-12 lg:h-14 lg:w-14"
-          />
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-color)] bg-[var(--bg-card)] p-1 transition-transform duration-500 group-hover:rotate-12 group-hover:scale-105 shadow-sm">
+            <img
+              src="/etc-logo.png"
+              alt="ETC Department logo"
+              className="h-full w-full object-contain"
+            />
+          </div>
 
           <div className="hidden min-w-0 sm:block">
-            <h1 className="text-base font-bold leading-tight text-slate-900 md:text-lg">
-              FEETA
+            <h1
+              className={`font-heading text-lg font-extrabold tracking-[2px] leading-tight transition-colors ${isDark ? "text-white" : "text-[#06152d]"
+                }`}
+            >
+              FEETA <span className="text-gold-gradient text-xs uppercase font-body font-semibold tracking-widest ml-1">x ISF</span>
             </h1>
 
-            <p className="truncate text-[11px] text-slate-500 md:text-xs">
-              Department of Electronics & Telecommunication Engineering
+            <p
+              className={`truncate text-[9.5px] uppercase tracking-[2px] font-medium transition-colors ${isDark ? "text-[#6481a5]" : "text-[#6b7c97]"
+                }`}
+            >
+              Dept. of Electronics & Telecommunication
             </p>
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden items-center gap-6 lg:flex">
-          {links.map((link) => (
-            <NavLink
-              key={link.name}
-              to={link.to}
-              end={link.to === "/"}
-              className={desktopLinkClass}
-            >
-              {link.name}
-            </NavLink>
-          ))}
+        {/* Desktop Navigation & Theme Toggle */}
+        <div className="hidden items-center gap-7 lg:flex">
+          <div className="flex items-center gap-6">
+            {links.map((link) => (
+              <NavLink
+                key={link.name}
+                to={link.to}
+                end={link.to === "/"}
+                className={desktopLinkClass}
+              >
+                {link.name}
+              </NavLink>
+            ))}
+          </div>
+
+          {/* Theme Toggle Button */}
+          <div className={`pl-3 border-l ${isDark ? "border-[#3b9cff26]" : "border-[#0d47a11f]"}`}>
+            <ThemeToggle />
+          </div>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          ref={menuButtonRef}
-          type="button"
-          onClick={() => setMenuOpen((open) => !open)}
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-2xl text-slate-700 transition hover:bg-slate-100 lg:hidden"
-          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-nav-menu"
-        >
-          {menuOpen ? "✕" : "☰"}
-        </button>
+        {/* Mobile Right Controls: Compact Theme Toggle & Hamburger */}
+        <div className="flex items-center gap-2.5 lg:hidden">
+          <ThemeToggle variant="circle" />
 
+          <button
+            ref={menuButtonRef}
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300 ${isDark
+                ? "border-[#3b9cff26] bg-[#ffffff08] text-[#abc4e3] hover:text-white hover:border-[#3b9cff66]"
+                : "border-[#0d47a11f] bg-[#0d47a10a] text-[#2c3e5a] hover:text-[#0d47a1]"
+              }`}
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav-menu"
+          >
+            {menuOpen ? (
+              <span className="text-lg font-bold leading-none">✕</span>
+            ) : (
+              <span className="text-xl leading-none">☰</span>
+            )}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation Drawer */}
       {menuOpen && (
         <div
           id="mobile-nav-menu"
-          className="border-t border-slate-200 bg-white px-6 py-4 lg:hidden"
+          className={`border-b px-6 py-5 lg:hidden backdrop-blur-2xl transition-all duration-300 ${isDark
+              ? "border-[#3b9cff26] bg-[#051329f2] shadow-2xl"
+              : "border-[#0d47a11f] bg-[#fffffffa] shadow-xl"
+            }`}
         >
           <div className="flex flex-col">
             {links.map((link, index) => (
@@ -139,12 +190,18 @@ function Navbar() {
                 {link.name}
               </NavLink>
             ))}
+
+            <div className="mt-5 pt-4 border-t border-[var(--border-color)] flex items-center justify-between">
+              <span className={`text-xs uppercase tracking-wider font-semibold ${isDark ? "text-[#6481a5]" : "text-[#6b7c97]"}`}>
+                Theme Style:
+              </span>
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       )}
-
     </nav>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;

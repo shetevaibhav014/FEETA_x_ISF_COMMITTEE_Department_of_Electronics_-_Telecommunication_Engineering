@@ -1,38 +1,165 @@
 @import "tailwindcss";
 
+/* -------------------------------------------------------------------------- */
+/* AURON-INSPIRED DESIGN SYSTEM: TOKENS & TYPOGRAPHY                           */
+/* -------------------------------------------------------------------------- */
+
 :root {
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --font-heading: 'Cinzel', serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
 
-  color: #0f172a;
-  background: #ffffff;
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-theme: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                      color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                      border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                      box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
+/* ----------------- DARK THEME (Cosmic Navy / Auron Obsidian) ----------------- */
+html[data-theme="dark"],
+html.dark {
+  --font-family-heading: var(--font-heading);
+  --font-family-body: var(--font-body);
+  --font-family-mono: var(--font-mono);
+
+  /* Deep cosmic obsidian navy palette */
+  --bg-primary: #020b18;
+  --bg-secondary: #051329;
+  --bg-tertiary: #081e3f;
+  --bg-page: #020b18;
+  --bg-page-alt: #051329;
+  --bg-card: rgba(5, 19, 41, 0.75);
+  --bg-card-solid: #051329;
+  --bg-card-hover: rgba(8, 30, 63, 0.85);
+  --bg-glass: rgba(2, 11, 24, 0.78);
+  --bg-nav: rgba(2, 11, 24, 0.85);
+  --bg-chip: rgba(59, 156, 255, 0.12);
+  --bg-input: #051329;
+  --bg-modal: #051329;
+
+  /* Typography Colors */
+  --text-primary: #f0f6fc;
+  --text-secondary: #abc4e3;
+  --text-muted: #6481a5;
+  --text-dim: #486180;
+  --text-heading: #ffffff;
+  --text-brand: #3b9cff;
+
+  /* Accent & Auron Electric Sapphire Gradients */
+  --color-gold: #3b9cff;
+  --color-gold-light: #a0d4ff;
+  --gold-gradient: linear-gradient(135deg, #1a6fd4 0%, #3b9cff 25%, #5bb8ff 50%, #3b9cff 75%, #1a6fd4 100%);
+  --gold-text-gradient: linear-gradient(135deg, #3b9cff 0%, #a0d4ff 50%, #3b9cff 100%);
+
+  /* Borders & Shadows */
+  --border-color: rgba(59, 156, 255, 0.16);
+  --border-subtle: rgba(59, 156, 255, 0.08);
+  --border-glow: rgba(59, 156, 255, 0.45);
+
+  --shadow-card: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 25px rgba(59, 156, 255, 0.28);
+  --shadow-gold-bright: 0 0 40px rgba(59, 156, 255, 0.5);
+
+  color-scheme: dark;
+}
+
+/* ---------------- BRIGHT THEME (Pristine Canvas / Royal Blue) ---------------- */
+html[data-theme="bright"],
+html.bright,
+html.light,
+html[data-theme="light"] {
+  --font-family-heading: var(--font-heading);
+  --font-family-body: var(--font-body);
+  --font-family-mono: var(--font-mono);
+
+  /* Luminous bright palette */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f8fc;
+  --bg-tertiary: #e8eff7;
+  --bg-page: #ffffff;
+  --bg-page-alt: #f5f8fc;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-solid: #ffffff;
+  --bg-card-hover: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.88);
+  --bg-nav: rgba(255, 255, 255, 0.92);
+  --bg-chip: #e0f2fe;
+  --bg-input: #ffffff;
+  --bg-modal: #ffffff;
+
+  /* Typography Colors */
+  --text-primary: #0a1628;
+  --text-secondary: #2c3e5a;
+  --text-muted: #6b7c97;
+  --text-dim: #94a3b8;
+  --text-heading: #06152d;
+  --text-brand: #0d47a1;
+
+  /* Accent & Royal Blue Gradients */
+  --color-gold: #0d47a1;
+  --color-gold-light: #1565c0;
+  --gold-gradient: linear-gradient(135deg, #0d47a1 0%, #1565c0 25%, #1976d2 50%, #1e88e5 75%, #0d47a1 100%);
+  --gold-text-gradient: linear-gradient(135deg, #0d47a1 0%, #1976d2 50%, #0d47a1 100%);
+
+  /* Borders & Shadows */
+  --border-color: rgba(13, 71, 161, 0.12);
+  --border-subtle: rgba(13, 71, 161, 0.06);
+  --border-glow: rgba(13, 71, 161, 0.35);
+
+  --shadow-card: 0 12px 30px -6px rgba(10, 22, 40, 0.08), 0 4px 12px rgba(10, 22, 40, 0.04);
+  --shadow-glow: 0 0 22px rgba(13, 71, 161, 0.18);
+  --shadow-gold-bright: 0 0 35px rgba(13, 71, 161, 0.32);
+
+  color-scheme: light;
+}
+
+/* -------------------------------------------------------------------------- */
+/* GLOBAL BASE TYPOGRAPHY & LAYOUT                                            */
+/* -------------------------------------------------------------------------- */
+
+html {
+  scroll-behavior: smooth;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-family-body);
+  transition: var(--transition-theme), font-family 0.25s ease-in-out;
+  line-height: 1.62;
+  position: relative;
 }
 
-button,
-input,
-textarea,
-select {
+/* Auron Headings in Cinzel */
+h1, h2, h3, h4, h5, h6,
+.font-heading {
+  font-family: var(--font-family-heading) !important;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-heading);
+  transition: color 0.3s ease;
+}
+
+p, span, a, button, input, textarea, select, label {
+  font-family: var(--font-family-body);
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button, input, textarea, select {
   font: inherit;
 }
 
@@ -52,4 +179,196 @@ a {
 
 #root {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* -------------------------------------------------------------------------- */
+/* AURON SIGNATURE STYLING & UTILITIES                                        */
+/* -------------------------------------------------------------------------- */
+
+/* 1. Background Grain Overlay */
+.background-grain {
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+/* 2. Text Gradient */
+.text-gold-gradient {
+  background: var(--gold-text-gradient);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-weight: 800;
+}
+
+/* 3. Section Headers with Diamond Ornament */
+.section-header {
+  text-align: center;
+  position: relative;
+  margin-bottom: 3.5rem;
+}
+
+.section-subtitle {
+  letter-spacing: 5px;
+  color: var(--color-gold);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: block;
+}
+
+.section-title {
+  font-family: var(--font-heading) !important;
+  letter-spacing: 2px;
+  padding-bottom: 22px;
+  font-size: clamp(2rem, 4vw, 2.85rem);
+  font-weight: 800;
+  display: inline-block;
+  position: relative;
+  color: var(--text-heading);
+}
+
+.section-title:after {
+  content: "";
+  background: var(--gold-gradient);
+  border-radius: 9999px;
+  width: 80px;
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.section-title:before {
+  content: "◇";
+  color: var(--color-gold);
+  background: var(--bg-page);
+  z-index: 1;
+  padding: 0 10px;
+  font-size: 1.05rem;
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  line-height: 1;
+}
+
+/* 4. Auron Glass Cards */
+.glass-card {
+  background: var(--bg-card);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-4px);
+}
+
+/* 5. Buttons */
+.cta-button {
+  background: var(--gold-gradient);
+  border-radius: 9999px;
+  box-shadow: 0 4px 14px rgba(59, 156, 255, 0.25);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  padding: 12px 28px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta-button:hover {
+  box-shadow: 0 0 25px rgba(59, 156, 255, 0.45);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.secondary-button {
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
+  border-radius: 9999px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.secondary-button:hover {
+  background: rgba(59, 156, 255, 0.08);
+  box-shadow: 0 0 20px rgba(59, 156, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* 6. Role Badge */
+.role-badge {
+  background: var(--gold-gradient);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  border-radius: 4px;
+  letter-spacing: 1.5px;
+  padding: 4px 14px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+/* 7. Footer Separator Ornament */
+.footer-separator-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 2rem 0;
+}
+
+.footer-separator-line {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+}
+
+.footer-separator-ornament {
+  color: var(--color-gold);
+  font-size: 1.1rem;
+}
+
+/* 8. Hide Scrollbar Utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

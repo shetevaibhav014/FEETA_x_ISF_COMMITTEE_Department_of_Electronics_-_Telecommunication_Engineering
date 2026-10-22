@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from "react"
+import { useTheme } from "../context/ThemeContext"
+import usePublicContent from "../hooks/usePublicContent"
 
-const photos = [
+/* eslint-disable react/only-export-components */
+export const photos = [
   { image: "/gallery/aluminimeet.jpeg", title: "Alumni Meet", category: "Event" },
   { image: "/gallery/java.jpeg", title: "SpringBoot Workshop", category: "Workshop" },
   { image: "/gallery/ppat.jpeg", title: "Pre-Placement Training", category: "Value Added Session" },
@@ -23,8 +26,22 @@ const photos = [
   { image: "/gallery/techno.jpeg", title: "WE", category: "Techno 2026" },
   { image: "/gallery/bts.jpeg", title: "Behind the Scenes", category: "Highlights" },
 ]
+/* eslint-enable react/only-export-components */
 
 function Gallery() {
+  const { isDark } = useTheme()
+  const { items: galleryItems, initialized } = usePublicContent("gallery")
+  const managedGalleryPhotos = galleryItems.map((item) => ({
+      image: item.data.image || item.data.poster || "",
+      title: item.title,
+      category: item.data.category || item.data.album || "Gallery",
+      alt: item.data.alt || item.title,
+    })).filter((item) => item.image)
+  const managedTitles = new Set(managedGalleryPhotos.map((photo) => photo.title.toLowerCase()))
+  const galleryPhotos = initialized ? managedGalleryPhotos : [
+    ...photos.filter((photo) => !managedTitles.has(photo.title.toLowerCase())),
+    ...managedGalleryPhotos,
+  ]
   const [selectedIndex, setSelectedIndex] = useState(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
@@ -51,14 +68,14 @@ function Gallery() {
 
     const interval = setInterval(() => {
       setActiveIndex((prevIndex) => {
-        const nextIndex = (prevIndex + 1) % photos.length
+        const nextIndex = (prevIndex + 1) % galleryPhotos.length
         scrollToIndex(nextIndex)
         return nextIndex
       })
     }, 3000)
 
     return () => clearInterval(interval)
-  }, [isPaused, selectedIndex, scrollToIndex])
+  }, [isPaused, selectedIndex, scrollToIndex, galleryPhotos.length])
 
   // Handle manual scroll sync with pagination display
   const handleScroll = () => {
@@ -67,7 +84,7 @@ function Gallery() {
       const scrollPosition = container.scrollLeft
       const cardWidth = container.firstElementChild?.offsetWidth || 300
       const newIndex = Math.round(scrollPosition / (cardWidth + 24)) // 24px gap
-      setActiveIndex(Math.min(Math.max(newIndex, 0), photos.length - 1))
+      setActiveIndex(Math.min(Math.max(newIndex, 0), galleryPhotos.length - 1))
     }
   }
 
@@ -89,31 +106,51 @@ function Gallery() {
       if (selectedIndex === null) return
       if (e.key === "Escape") setSelectedIndex(null)
       if (e.key === "ArrowLeft") {
-        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : photos.length - 1))
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : galleryPhotos.length - 1))
       }
       if (e.key === "ArrowRight") {
-        setSelectedIndex((prev) => (prev < photos.length - 1 ? prev + 1 : 0))
+        setSelectedIndex((prev) => (prev < galleryPhotos.length - 1 ? prev + 1 : 0))
       }
     }
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [selectedIndex])
+  }, [selectedIndex, galleryPhotos.length])
 
   return (
-    <section id="gallery" className="bg-white px-6 py-24">
+    <section
+      id="gallery"
+      className={`px-6 py-24 transition-colors duration-300 ${
+        isDark ? "bg-[#050b18] text-white" : "bg-white text-slate-900"
+      }`}
+    >
       <div className="mx-auto max-w-7xl">
         {/* Section Heading */}
         <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-3 text-sm font-semibold tracking-wide text-blue-600">
+          <p
+            className={`mb-3 text-sm font-semibold tracking-wide uppercase ${
+              isDark ? "text-cyan-400" : "text-blue-600"
+            }`}
+          >
             OUR MEMORIES
           </p>
 
-          <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-            Forum <span className="text-blue-600">Gallery</span>
+          <h2
+            className={`text-4xl font-bold tracking-tight sm:text-5xl transition-colors ${
+              isDark ? "text-white" : "text-slate-900"
+            }`}
+          >
+            Forum{" "}
+            <span className={isDark ? "text-cyan-400" : "text-blue-600"}>
+              Gallery
+            </span>
           </h2>
 
-          <p className="mt-6 text-lg leading-8 text-slate-600">
+          <p
+            className={`mt-6 text-lg leading-8 transition-colors ${
+              isDark ? "text-slate-400" : "text-slate-600"
+            }`}
+          >
             Explore moments, activities, and memories from the ETC Department Forum.
           </p>
         </div>
@@ -133,12 +170,16 @@ function Gallery() {
             className="flex gap-6 overflow-x-auto scroll-smooth pb-6 pt-2 no-scrollbar snap-x snap-mandatory"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {photos.map((photo, index) => (
+            {galleryPhotos.map((photo, index) => (
               <button
                 key={index}
                 type="button"
                 onClick={() => setSelectedIndex(index)}
-                className="group/card relative h-80 min-w-[280px] max-w-[320px] flex-shrink-0 overflow-hidden rounded-2xl bg-slate-100 text-left shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl snap-start focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`group/card relative h-80 min-w-[280px] max-w-[320px] flex-shrink-0 overflow-hidden rounded-2xl text-left shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl snap-start focus:outline-none focus:ring-2 focus:ring-blue-500 border ${
+                  isDark
+                    ? "bg-slate-900/90 border-slate-800"
+                    : "bg-slate-100 border-slate-200"
+                }`}
               >
                 <img
                   src={photo.image}
@@ -149,7 +190,7 @@ function Gallery() {
                 {/* Card Overlay */}
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent p-5 pt-16">
                   {photo.category.trim() && photo.category !== "." && (
-                    <p className="text-xs font-semibold tracking-wide text-blue-300">
+                    <p className="text-xs font-semibold tracking-wide text-cyan-300">
                       {photo.category}
                     </p>
                   )}
@@ -168,7 +209,11 @@ function Gallery() {
           <button
             type="button"
             onClick={() => scroll("left")}
-            className="absolute left-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 shadow-lg border border-slate-100 text-slate-800 backdrop-blur-sm transition-all duration-200 hover:bg-white hover:scale-105 active:scale-95 sm:-left-5"
+            className={`absolute left-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full shadow-lg border backdrop-blur-sm transition-all duration-200 hover:scale-105 active:scale-95 sm:-left-5 ${
+              isDark
+                ? "bg-slate-900/90 border-slate-700 text-white hover:bg-slate-800"
+                : "bg-white/90 border-slate-100 text-slate-800 hover:bg-white"
+            }`}
             aria-label="Scroll left"
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -180,7 +225,11 @@ function Gallery() {
           <button
             type="button"
             onClick={() => scroll("right")}
-            className="absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 shadow-lg border border-slate-100 text-slate-800 backdrop-blur-sm transition-all duration-200 hover:bg-white hover:scale-105 active:scale-95 sm:-right-5"
+            className={`absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full shadow-lg border backdrop-blur-sm transition-all duration-200 hover:scale-105 active:scale-95 sm:-right-5 ${
+              isDark
+                ? "bg-slate-900/90 border-slate-700 text-white hover:bg-slate-800"
+                : "bg-white/90 border-slate-100 text-slate-800 hover:bg-white"
+            }`}
             aria-label="Scroll right"
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -189,13 +238,21 @@ function Gallery() {
           </button>
         </div>
 
-        {/* Clean Numeric Pagination Indicator (Replaces 21 dots) */}
-        <div className="mt-8 flex items-center justify-center gap-3 text-sm font-medium text-slate-600">
-          <span className="tabular-nums font-semibold text-slate-900">
+        {/* Clean Numeric Pagination Indicator */}
+        <div
+          className={`mt-8 flex items-center justify-center gap-3 text-sm font-medium transition-colors ${
+            isDark ? "text-slate-400" : "text-slate-600"
+          }`}
+        >
+          <span
+            className={`tabular-nums font-semibold ${
+              isDark ? "text-white" : "text-slate-900"
+            }`}
+          >
             {activeIndex + 1}
           </span>
-          <span className="text-slate-300">/</span>
-          <span className="tabular-nums text-slate-500">{photos.length}</span>
+          <span className={isDark ? "text-slate-600" : "text-slate-300"}>/</span>
+          <span className="tabular-nums text-slate-500">{galleryPhotos.length}</span>
         </div>
       </div>
 
@@ -210,7 +267,7 @@ function Gallery() {
             type="button"
             onClick={(e) => {
               e.stopPropagation()
-              setSelectedIndex((prev) => (prev > 0 ? prev - 1 : photos.length - 1))
+              setSelectedIndex((prev) => (prev > 0 ? prev - 1 : galleryPhotos.length - 1))
             }}
             className="absolute left-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 sm:left-8"
             aria-label="Previous photo"
@@ -223,19 +280,19 @@ function Gallery() {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={photos[selectedIndex].image}
-              alt={photos[selectedIndex].title || "Full view image"}
+              src={galleryPhotos[selectedIndex].image}
+              alt={galleryPhotos[selectedIndex].alt || galleryPhotos[selectedIndex].title}
               className="mx-auto max-h-[75vh] max-w-full rounded-2xl object-contain shadow-2xl"
             />
 
             <div className="mt-4">
               <h3 className="text-xl font-bold text-white">
-                {photos[selectedIndex].title || "Gallery Feature"}
+                {galleryPhotos[selectedIndex].title || "Gallery Feature"}
               </h3>
 
-              {photos[selectedIndex].category.trim() && (
+              {galleryPhotos[selectedIndex].category.trim() && (
                 <p className="mt-1 text-sm text-slate-300">
-                  {photos[selectedIndex].category}
+                  {galleryPhotos[selectedIndex].category}
                 </p>
               )}
             </div>
@@ -256,7 +313,7 @@ function Gallery() {
             type="button"
             onClick={(e) => {
               e.stopPropagation()
-              setSelectedIndex((prev) => (prev < photos.length - 1 ? prev + 1 : 0))
+              setSelectedIndex((prev) => (prev < galleryPhotos.length - 1 ? prev + 1 : 0))
             }}
             className="absolute right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 sm:right-8"
             aria-label="Next photo"

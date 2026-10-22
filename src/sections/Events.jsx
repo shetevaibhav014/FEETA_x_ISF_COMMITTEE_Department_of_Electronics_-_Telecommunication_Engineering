@@ -1,6 +1,9 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
+import { useTheme } from "../context/ThemeContext";
+import usePublicContent from "../hooks/usePublicContent";
 
-const events = [
+/* eslint-disable react/only-export-components */
+export const events = [
   {
     id: "forum-installation",
     date: "25",
@@ -31,93 +34,138 @@ const events = [
     category: "Upcoming",
     isAvailable: false,
   },
-]
+];
+/* eslint-enable react/only-export-components */
 
 function Events() {
-  const [selectedEvent, setSelectedEvent] = useState(null)
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const { isDark } = useTheme();
+  const { items: managedEvents, initialized } = usePublicContent("events");
+  const managedEventCards = managedEvents.map((item) => {
+      const dateValue = item.data.date || "";
+      const parsedDate = new Date(dateValue);
+      const hasFullDate = /^\d{4}-\d{2}-\d{2}/.test(dateValue) && !Number.isNaN(parsedDate.valueOf());
+      return {
+        id: item.id,
+        title: item.title,
+        date: hasFullDate ? String(parsedDate.getDate()) : dateValue || "TBD",
+        month: hasFullDate ? parsedDate.toLocaleString("en", { month: "short" }).toUpperCase() : item.data.month || "TBA",
+        description: item.data.description || "",
+        category: item.data.category || "Event",
+        venue: item.data.venue || "",
+        poster: item.data.poster || item.data.image || "",
+        registrationLink: item.data.registrationLink || "",
+        isAvailable: Boolean(item.data.registrationLink || item.data.isAvailable),
+      };
+    });
+  const managedTitles = new Set(managedEventCards.map((event) => event.title.toLowerCase()));
+  const visibleEvents = initialized ? managedEventCards : [
+    ...events.filter((event) => !managedTitles.has(event.title.toLowerCase())),
+    ...managedEventCards,
+  ];
 
   // Escape key handler to close modal
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === "Escape") setSelectedEvent(null)
-    }
+      if (e.key === "Escape") setSelectedEvent(null);
+    };
     if (selectedEvent) {
-      window.addEventListener("keydown", handleKeyDown)
+      window.addEventListener("keydown", handleKeyDown);
     }
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [selectedEvent])
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedEvent]);
 
   return (
     <>
-      <section id="events" className="bg-slate-950 px-6 py-24">
+      <section
+        id="events"
+        className="px-6 py-28 transition-colors duration-300 relative bg-[var(--bg-page)] text-[var(--text-primary)]"
+      >
         <div className="mx-auto max-w-7xl">
-          {/* Section Heading */}
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="mb-3 text-sm font-semibold tracking-wide text-blue-400">
-              What's Happening
-            </p>
+          {/* Auron Section Header */}
+          <div className="section-header max-w-3xl mx-auto">
+            <span className="section-subtitle">What's Happening</span>
 
-            <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
-              Upcoming <span className="text-blue-500">Events</span>
+            <h2 className="section-title">
+              Upcoming <span className="text-gold-gradient">Events</span>
             </h2>
 
-            <p className="mt-6 text-lg leading-8 text-slate-400">
+            <p
+              className={`mt-4 text-base sm:text-lg leading-relaxed transition-colors max-w-2xl mx-auto ${
+                isDark ? "text-[#abc4e3]" : "text-[#4a5568]"
+              }`}
+            >
               Stay updated with the latest technical events, workshops,
               competitions, and activities organized by the ETC Department Forum.
             </p>
           </div>
 
-          {/* Events List */}
+          {/* Events List as Glass Cards */}
           <div className="mx-auto mt-16 max-w-5xl space-y-6">
-            {events.map((event) => (
+            {visibleEvents.map((event) => (
               <div
                 key={event.id}
-                className="group flex flex-col gap-6 rounded-2xl border border-slate-800 bg-slate-900 p-6 transition duration-300 hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/10 sm:flex-row sm:items-center"
+                className="glass-card flex flex-col gap-6 p-6 sm:flex-row sm:items-center justify-between group"
               >
                 {/* Date Badge */}
-                <div className="flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-2xl bg-blue-600 text-white">
-                  <span className="text-2xl font-bold tracking-tight">
+                <div className="flex h-22 w-22 sm:h-24 sm:w-24 shrink-0 flex-col items-center justify-center rounded-2xl bg-[var(--gold-gradient)] text-white shadow-md">
+                  <span className="font-heading text-2xl sm:text-3xl font-extrabold tracking-tight">
                     {event.date}
                   </span>
-                  <span className="text-xs font-semibold tracking-wide">
+                  <span className="text-[11px] font-bold tracking-widest uppercase">
                     {event.month}
                   </span>
                 </div>
 
                 {/* Event Information */}
                 <div className="flex-1">
-                  <span className="inline-block rounded-full bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-400">
+                  <span
+                    className={`inline-block rounded-full px-3 py-1 text-[11px] font-bold tracking-wider uppercase border ${
+                      isDark
+                        ? "bg-[#3b9cff15] text-[#3b9cff] border-[#3b9cff33]"
+                        : "bg-[#0d47a10f] text-[#0d47a1] border-[#0d47a126]"
+                    }`}
+                  >
                     {event.category}
                   </span>
 
-                  <h3 className="mt-3 text-2xl font-bold text-white">
+                  <h3
+                    className="mt-3 text-2xl font-bold font-heading transition-colors text-[var(--text-heading)] group-hover:text-[var(--color-gold)]"
+                  >
                     {event.title}
                   </h3>
 
-                  <p className="mt-2 leading-7 text-slate-400">
+                  <p
+                    className={`mt-2 text-sm sm:text-base leading-relaxed transition-colors ${
+                      isDark ? "text-[#abc4e3]" : "text-[#4a5568]"
+                    }`}
+                  >
                     {event.description}
                   </p>
                 </div>
 
-                {/* View Details / Disabled Button (Fixes false affordance) */}
-                {event.isAvailable ? (
-                  <button
-                    type="button"
-                    onClick={() => setSelectedEvent(event)}
-                    className="rounded-full border border-slate-700 px-6 py-3 font-semibold text-white transition hover:border-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    View Details
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    disabled
-                    aria-disabled="true"
-                    className="cursor-not-allowed rounded-full border border-slate-800 bg-slate-800/50 px-6 py-3 font-semibold text-slate-500 opacity-75"
-                  >
-                    Coming Soon
-                  </button>
-                )}
+                {/* View Details / Disabled Button */}
+                <div className="shrink-0">
+                  {event.isAvailable ? (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedEvent(event)}
+                      className="cta-button"
+                    >
+                      <span>View Details</span>
+                      <span>→</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled
+                      aria-disabled="true"
+                      className="cursor-not-allowed rounded-full border px-6 py-3 text-xs uppercase tracking-wider font-bold opacity-60 border-[var(--border-color)] text-[var(--text-muted)]"
+                    >
+                      Coming Soon
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -127,47 +175,53 @@ function Events() {
       {/* Event Details Modal */}
       {selectedEvent && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 px-6 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 px-6 backdrop-blur-md"
           onClick={() => setSelectedEvent(null)}
         >
           <div
-            className="relative w-full max-w-lg rounded-3xl border border-slate-700 bg-slate-900 p-8 shadow-2xl"
+            className="glass-card relative w-full max-w-lg p-8 shadow-2xl transition-all"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
             <button
               type="button"
               onClick={() => setSelectedEvent(null)}
-              className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 text-xl text-slate-300 transition hover:bg-red-500 hover:text-white"
+              className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-color)] text-lg transition hover:bg-red-500 hover:text-white"
               aria-label="Close event details"
             >
               ×
             </button>
 
             {/* Event Category */}
-            <span className="inline-block rounded-full bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-400">
+            <span
+              className={`inline-block rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider border ${
+                isDark
+                  ? "bg-[#3b9cff15] text-[#3b9cff] border-[#3b9cff33]"
+                  : "bg-[#0d47a10f] text-[#0d47a1] border-[#0d47a126]"
+              }`}
+            >
               {selectedEvent.category}
             </span>
 
             {/* Event Title */}
-            <h3 className="mt-5 pr-10 text-3xl font-bold text-white">
+            <h3 className="mt-5 pr-10 text-3xl font-bold font-heading text-[var(--text-heading)]">
               {selectedEvent.title}
             </h3>
 
             {/* Date Details */}
-            <div className="mt-6 flex items-center gap-4 rounded-2xl bg-slate-800 p-4">
-              <div className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-xl bg-blue-600 text-white">
-                <span className="text-xl font-bold">
-                  {selectedEvent.date}
-                </span>
-                <span className="text-xs font-semibold">
-                  {selectedEvent.month}
-                </span>
+            <div
+              className="mt-6 flex items-center gap-4 rounded-2xl p-4 border border-[var(--border-color)] bg-[var(--bg-card)]"
+            >
+              <div className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-xl bg-[var(--gold-gradient)] text-white">
+                <span className="font-heading text-xl font-bold">{selectedEvent.date}</span>
+                <span className="text-xs font-semibold">{selectedEvent.month}</span>
               </div>
 
               <div>
-                <p className="font-semibold text-white">Event Date</p>
-                <p className="text-sm text-slate-400">
+                <p className="font-semibold font-heading text-[var(--text-heading)]">
+                  Event Date
+                </p>
+                <p className={`text-sm ${isDark ? "text-[#abc4e3]" : "text-[#4a5568]"}`}>
                   {selectedEvent.date === "TBD" || selectedEvent.date === "TBA"
                     ? "Date to be announced"
                     : `${selectedEvent.date} ${selectedEvent.month}`}
@@ -176,15 +230,18 @@ function Events() {
             </div>
 
             {/* Description */}
-            <p className="mt-6 leading-7 text-slate-400">
+            <p className={`mt-6 leading-relaxed ${isDark ? "text-[#abc4e3]" : "text-[#4a5568]"}`}>
               {selectedEvent.description}
             </p>
+            {selectedEvent.venue && <p className="mt-4 text-sm text-[var(--text-muted)]">Venue: {selectedEvent.venue}</p>}
+            {selectedEvent.poster && <img className="mt-5 max-h-64 w-full rounded-xl object-cover" src={selectedEvent.poster} alt={selectedEvent.title} />}
+            {selectedEvent.registrationLink && <a className="cta-button mt-6 inline-flex" href={selectedEvent.registrationLink} target="_blank" rel="noreferrer">Register for this event <span>→</span></a>}
 
             {/* Close Modal CTA */}
             <button
               type="button"
               onClick={() => setSelectedEvent(null)}
-              className="mt-8 w-full rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="cta-button mt-8 w-full"
             >
               Close
             </button>
@@ -192,7 +249,7 @@ function Events() {
         </div>
       )}
     </>
-  )
+  );
 }
 
-export default Events
+export default Events;

@@ -1,7 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import MemberCard from "../components/MemberCard";
+import { useTheme } from "../context/ThemeContext";
+import usePublicContent from "../hooks/usePublicContent";
 
-const presidentData = {
+/* eslint-disable react/only-export-components */
+export const presidentData = {
   name: "Mr. Tushar Thakare",
   role: "President",
   department: "Department of Electronics & Telecommunication Engineering",
@@ -14,7 +17,7 @@ const presidentData = {
 };
 
 // Complete list of 21 FEETA Members
-const feetaMembers = [
+export const feetaMembers = [
   {
     name: "Ms. Divyani Daware",
     role: "Vice President - FEETA",
@@ -186,7 +189,7 @@ const feetaMembers = [
 ];
 
 // Complete list of 11 ISF Members
-const isfMembers = [
+export const isfMembers = [
   {
     name: "Mr. Yash Site",
     role: "Vice President - ISF",
@@ -277,7 +280,7 @@ const isfMembers = [
   },
 ];
 
-const mentors = [
+export const mentors = [
   {
     name: "Mr. Chaitanya Wankhede",
     position: "Mentor",
@@ -311,6 +314,7 @@ const mentors = [
     image: "/members/m4.jpg",
   },
 ];
+/* eslint-enable react/only-export-components */
 
 function Team({
   category = null,
@@ -321,6 +325,8 @@ function Team({
   showPresident,
   showMentors,
 } = {}) {
+  const { isDark } = useTheme();
+  const { items: managedTeam, initialized } = usePublicContent("team");
   const scrollRef = useRef(null);
   const isFiltered = category === "FEETA" || category === "ISF";
   const [activeCategory, setActiveCategory] = useState(category || "FEETA");
@@ -335,18 +341,41 @@ function Team({
     (category === "FEETA"
       ? "Student Forum"
       : category === "ISF"
-      ? "Technical Committee"
-      : "Our Team");
+        ? "Technical Committee"
+        : "Our Team");
 
   const resolvedTitle =
     title ??
     (category === "FEETA"
       ? "FEETA - Student Forum"
       : category === "ISF"
-      ? "ISF - Technical Committee"
-      : "Meet the ETC Forum");
+        ? "ISF - Technical Committee"
+        : "Meet the ETC Forum");
 
-  const displayedMembers = activeCategory === "FEETA" ? feetaMembers : isfMembers;
+  const managedMembers = managedTeam.map((item) => ({
+    ...item.data,
+    name: item.title || item.data.name,
+    role: item.data.role || "Member",
+    image: item.data.image || "",
+    linkedinId: item.data.linkedinId || "",
+    linkedinUrl: item.data.linkedinUrl || item.data.socials?.linkedin || "",
+    category: item.data.category || activeCategory,
+    position: item.data.position || item.data.role || "Mentor",
+  }));
+  const baseMembers = activeCategory === "FEETA" ? feetaMembers : isfMembers;
+  const managedCategoryMembers = managedMembers.filter((member) => member.category === activeCategory && member.role.toLowerCase() !== "president");
+  const managedNames = new Set(managedCategoryMembers.map((member) => member.name.toLowerCase()));
+  const displayedMembers = initialized ? managedCategoryMembers : [
+    ...baseMembers.filter((member) => !managedNames.has(member.name.toLowerCase())),
+    ...managedCategoryMembers,
+  ];
+  const displayedPresident = managedMembers.find((member) => member.role.toLowerCase() === "president" && member.category === activeCategory)
+    || managedMembers.find((member) => member.role.toLowerCase() === "president")
+    || (initialized ? null : presidentData);
+  const dynamicMentors = managedMembers.filter((member) => member.category === "Mentor");
+  const displayedMentors = initialized
+    ? dynamicMentors
+    : mentors;
   const totalDots = 5;
 
   const handleScroll = (direction) => {
@@ -398,11 +427,17 @@ function Team({
   const getDotStyles = (index) => {
     const distance = Math.abs(index - activeDotIndex);
     if (distance === 0) {
-      return "w-3.5 h-3.5 bg-slate-900 scale-100 opacity-100";
+      return isDark
+        ? "w-3.5 h-3.5 bg-cyan-400 scale-100 opacity-100 shadow-[0_0_8px_#22d3ee]"
+        : "w-3.5 h-3.5 bg-slate-900 scale-100 opacity-100";
     } else if (distance === 1) {
-      return "w-3 h-3 bg-slate-300 scale-90 opacity-80 hover:bg-slate-400";
+      return isDark
+        ? "w-3 h-3 bg-slate-700 scale-90 opacity-80 hover:bg-slate-600"
+        : "w-3 h-3 bg-slate-300 scale-90 opacity-80 hover:bg-slate-400";
     } else {
-      return "w-2.5 h-2.5 bg-slate-200 scale-75 opacity-60 hover:bg-slate-400";
+      return isDark
+        ? "w-2.5 h-2.5 bg-slate-800 scale-75 opacity-60 hover:bg-slate-700"
+        : "w-2.5 h-2.5 bg-slate-200 scale-75 opacity-60 hover:bg-slate-400";
     }
   };
 
@@ -423,101 +458,120 @@ function Team({
   }, [activeCategory]);
 
   return (
-    <section id="team" className="bg-slate-50 py-24 overflow-hidden">
+    <section
+      id="team"
+      className="py-28 overflow-hidden transition-colors duration-300 relative bg-[var(--bg-page-alt)] text-[var(--text-primary)]"
+    >
       {/* 1. Header & President Section */}
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">
+        <div className="section-header max-w-3xl mx-auto">
+          <span className="section-subtitle">
             {resolvedEyebrow}
-          </p>
+          </span>
           {isFiltered ? (
-            <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+            <h2 className="section-title">
               {resolvedTitle}
             </h2>
           ) : (
-            <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-              Meet the <span className="text-blue-600">Forum</span>
+            <h2 className="section-title">
+              Meet the <span className="text-gold-gradient">Committee</span>
             </h2>
           )}
 
           {vision && (
-            <blockquote className="mt-6 italic text-slate-600 text-sm sm:text-base leading-relaxed">
+            <blockquote
+              className={`mt-4 italic text-sm sm:text-base leading-relaxed transition-colors max-w-2xl mx-auto ${isDark ? "text-[#abc4e3]" : "text-[#4a5568]"
+                }`}
+            >
               "{vision}"
             </blockquote>
           )}
         </div>
 
-        {/* Centered President Card */}
-        {resolvedShowPresident && (
-          <div className="mt-12 flex justify-center">
-            <div className="w-full max-w-2xl bg-white rounded-3xl p-8 shadow-xl border border-blue-100 text-center flex flex-col items-center transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-              <div className="overflow-hidden rounded-full h-36 w-36 ring-4 ring-blue-500/20 shadow-md mb-6">
+        {/* Centered President Card (Auron Centerpiece Card) */}
+        {resolvedShowPresident && displayedPresident && (
+          <div className="mt-8 flex justify-center">
+            <div
+              className="glass-card w-full max-w-2xl p-8 sm:p-10 text-center flex flex-col items-center group transition-all duration-300"
+            >
+              <div
+                className="overflow-hidden rounded-full h-36 w-36 shadow-lg mb-6 ring-4 ring-[var(--color-gold)] p-1 bg-[var(--bg-card)] transition-transform duration-500 group-hover:scale-105"
+              >
                 <img
-                  src={presidentData.image}
-                  alt={presidentData.name}
-                  className="h-full w-full object-cover"
+                  src={displayedPresident.image}
+                  alt={displayedPresident.name}
+                  className="h-full w-full object-cover rounded-full"
                 />
               </div>
 
-              <span className="px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider mb-2">
-                {presidentData.role}
+              <span className="role-badge mb-3">
+                {displayedPresident.role}
               </span>
 
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                {presidentData.name}
+              <h3
+                className="text-2xl sm:text-3xl font-extrabold font-heading transition-colors text-[var(--text-heading)] group-hover:text-[var(--color-gold)]"
+              >
+                {displayedPresident.name}
               </h3>
 
-              <p className="text-xs sm:text-sm font-semibold text-slate-500 mt-1 tracking-wide">
-                {presidentData.department} • {presidentData.year}
+              <p
+                className={`text-xs sm:text-sm font-semibold uppercase tracking-wider mt-1.5 transition-colors ${isDark ? "text-[#6481a5]" : "text-[#6b7c97]"
+                  }`}
+              >
+                {displayedPresident.department || "Department of Electronics & Telecommunication Engineering"} • {displayedPresident.year}
               </p>
 
-              <blockquote className="mt-4 italic text-slate-600 text-sm sm:text-base leading-relaxed max-w-lg">
-                "{presidentData.vision}"
+              <blockquote
+                className={`mt-4 italic text-sm sm:text-base leading-relaxed max-w-lg transition-colors ${isDark ? "text-[#abc4e3]" : "text-[#4a5568]"
+                  }`}
+              >
+                "{displayedPresident.vision || displayedPresident.description || ""}"
               </blockquote>
 
               {/* LinkedIn Button */}
               <a
-                href={presidentData.linkedinUrl}
+                href={displayedPresident.linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 transition-colors text-xs font-semibold shadow-sm"
-                aria-label={`Visit ${presidentData.name}'s LinkedIn profile`}
+                className={`mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-full border text-xs font-bold uppercase tracking-wider shadow-sm transition-all duration-300 hover:scale-105 ${isDark
+                    ? "border-[#3b9cff33] bg-[#020b18] text-[#f0f6fc] hover:border-[#3b9cff88] hover:shadow-[0_0_15px_rgba(59,156,255,0.35)]"
+                    : "border-[#0d47a126] bg-white text-[#0a1628] hover:border-[#0d47a166] hover:shadow-md"
+                  }`}
+                aria-label={`Visit ${displayedPresident.name}'s LinkedIn profile`}
               >
                 <svg
-                  className="h-4 w-4 fill-current text-blue-600 group-hover:text-blue-700 transition-colors"
+                  className="h-4 w-4 fill-current text-[var(--color-gold)]"
                   viewBox="0 0 24 24"
                 >
                   <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-1.3.7-2.1 1.75-2.1 1.05 0 1.5.8 1.5 2.1v4.93h2.79M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.54a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Z" />
                 </svg>
-                <span>{presidentData.linkedinId}</span>
+                <span>{displayedPresident.linkedinId || "LinkedIn profile"}</span>
               </a>
             </div>
           </div>
         )}
 
-        {/* Category Toggle Buttons */}
+        {/* Auron Wing Filter Buttons */}
         {resolvedShowToggle && (
-          <div className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-4">
+          <div className="mt-14 flex flex-col sm:flex-row justify-center items-center gap-4">
             <button
               onClick={() => setActiveCategory("ISF")}
-              className={`w-full sm:w-auto px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 shadow-md ${
-                activeCategory === "ISF"
-                  ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-blue-500/20 hover:from-blue-500 hover:to-cyan-500"
-                  : "border border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
-              }`}
+              className={`w-full sm:w-auto px-7 py-3 rounded-full font-bold text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer ${activeCategory === "ISF"
+                  ? "cta-button"
+                  : "secondary-button"
+                }`}
             >
-              ISF Members
+              ISF Committee
             </button>
 
             <button
               onClick={() => setActiveCategory("FEETA")}
-              className={`w-full sm:w-auto px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 shadow-md ${
-                activeCategory === "FEETA"
-                  ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-blue-500/20 hover:from-blue-500 hover:to-cyan-500"
-                  : "border border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
-              }`}
+              className={`w-full sm:w-auto px-7 py-3 rounded-full font-bold text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer ${activeCategory === "FEETA"
+                  ? "cta-button"
+                  : "secondary-button"
+                }`}
             >
-              FEETA Members
+              FEETA Forum
             </button>
           </div>
         )}
@@ -542,11 +596,15 @@ function Team({
         {/* Previous Button */}
         <button
           onClick={() => handleScroll("left")}
-          className="group flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md border border-slate-200 transition-all duration-200 hover:bg-slate-50 hover:shadow-lg active:scale-95 cursor-pointer"
+          className={`group flex h-12 w-12 items-center justify-center rounded-full shadow-md border transition-all duration-200 active:scale-95 cursor-pointer ${isDark
+              ? "bg-slate-900 border-slate-700 text-white hover:bg-slate-800 hover:border-cyan-500/50"
+              : "bg-white border-slate-200 text-slate-800 hover:bg-slate-50 hover:shadow-lg"
+            }`}
           aria-label="Previous Members"
         >
           <svg
-            className="h-5 w-5 text-slate-800 transition-transform group-hover:-translate-x-0.5"
+            className={`h-5 w-5 transition-transform group-hover:-translate-x-0.5 ${isDark ? "text-slate-200" : "text-slate-800"
+              }`}
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -577,11 +635,15 @@ function Team({
         {/* Next Button */}
         <button
           onClick={() => handleScroll("right")}
-          className="group flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md border border-slate-200 transition-all duration-200 hover:bg-slate-50 hover:shadow-lg active:scale-95 cursor-pointer"
+          className={`group flex h-12 w-12 items-center justify-center rounded-full shadow-md border transition-all duration-200 active:scale-95 cursor-pointer ${isDark
+              ? "bg-slate-900 border-slate-700 text-white hover:bg-slate-800 hover:border-cyan-500/50"
+              : "bg-white border-slate-200 text-slate-800 hover:bg-slate-50 hover:shadow-lg"
+            }`}
           aria-label="Next Members"
         >
           <svg
-            className="h-5 w-5 text-slate-800 transition-transform group-hover:translate-x-0.5"
+            className={`h-5 w-5 transition-transform group-hover:translate-x-0.5 ${isDark ? "text-slate-200" : "text-slate-800"
+              }`}
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -600,24 +662,39 @@ function Team({
       {resolvedShowMentors && (
         <div className="mx-auto max-w-7xl px-6 mt-24">
           <div className="text-center">
-            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">
+            <p
+              className={`mb-2 text-sm font-semibold uppercase tracking-[0.3em] transition-colors ${isDark ? "text-cyan-400" : "text-blue-600"
+                }`}
+            >
               Guidance & Leadership
             </p>
-            <h3 className="text-3xl font-bold text-slate-900 sm:text-4xl">
+            <h3
+              className={`text-3xl font-bold sm:text-4xl transition-colors ${isDark ? "text-white" : "text-slate-900"
+                }`}
+            >
               Our Mentors
             </h3>
-            <p className="mt-2 text-slate-600">
+            <p
+              className={`mt-2 transition-colors ${isDark ? "text-slate-400" : "text-slate-600"
+                }`}
+            >
               Providing constant support and direction for the forum
             </p>
           </div>
 
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {mentors.map((mentor, index) => (
+            {displayedMentors.map((mentor, index) => (
               <div
                 key={index}
-                className="group bg-white rounded-2xl p-6 shadow-md border border-slate-100 text-center flex flex-col items-center transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-blue-100"
+                className={`group rounded-2xl p-6 shadow-md border text-center flex flex-col items-center transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${isDark
+                    ? "bg-slate-900/80 border-slate-800 text-white hover:border-cyan-500/50"
+                    : "bg-white border-slate-100 text-slate-900 hover:border-blue-100"
+                  }`}
               >
-                <div className="overflow-hidden rounded-full h-28 w-28 ring-4 ring-blue-50 shadow-sm mb-4">
+                <div
+                  className={`overflow-hidden rounded-full h-28 w-28 shadow-sm mb-4 ring-4 ${isDark ? "ring-cyan-500/20" : "ring-blue-50"
+                    }`}
+                >
                   <img
                     src={mentor.image}
                     alt={mentor.name}
@@ -625,13 +702,24 @@ function Team({
                   />
                 </div>
 
-                <h4 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                <h4
+                  className={`text-lg font-bold transition-colors ${isDark
+                      ? "text-white group-hover:text-cyan-400"
+                      : "text-slate-900 group-hover:text-blue-600"
+                    }`}
+                >
                   {mentor.name}
                 </h4>
-                <p className="text-sm font-medium text-blue-600">
+                <p
+                  className={`text-sm font-medium transition-colors ${isDark ? "text-cyan-400" : "text-blue-600"
+                    }`}
+                >
                   {mentor.position}
                 </p>
-                <p className="text-xs text-slate-500 mt-1 font-medium">
+                <p
+                  className={`text-xs mt-1 font-medium transition-colors ${isDark ? "text-slate-400" : "text-slate-500"
+                    }`}
+                >
                   {mentor.year}
                 </p>
 
@@ -639,11 +727,15 @@ function Team({
                   href={mentor.linkedinUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 transition-colors text-xs font-semibold shadow-sm"
+                  className={`mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-xs font-semibold shadow-sm transition-colors ${isDark
+                      ? "border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white"
+                      : "border-slate-300 text-slate-700 hover:bg-slate-100"
+                    }`}
                   aria-label={`Visit ${mentor.name}'s LinkedIn profile`}
                 >
                   <svg
-                    className="h-4 w-4 fill-current text-blue-600 group-hover:text-blue-700 transition-colors"
+                    className={`h-4 w-4 fill-current transition-colors ${isDark ? "text-cyan-400" : "text-blue-600"
+                      }`}
                     viewBox="0 0 24 24"
                   >
                     <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-1.3.7-2.1 1.75-2.1 1.05 0 1.5.8 1.5 2.1v4.93h2.79M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.54a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Z" />

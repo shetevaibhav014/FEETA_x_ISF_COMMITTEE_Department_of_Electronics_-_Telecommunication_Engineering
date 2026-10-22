@@ -1,9 +1,18 @@
 import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import EtcBackground from "./EtcBackground" // Ensure path matches your file location
+import EtcBackground from "./EtcBackground"
+import { useTheme } from "../context/ThemeContext"
+import usePublicContent from "../hooks/usePublicContent"
 
 export default function Hero() {
-  const fullText = "A platform for students to learn, innovate, collaborate and lead through technology and teamwork."
+  const { isDark } = useTheme()
+  const { items: heroEntries } = usePublicContent("hero")
+  const { items: announcementEntries } = usePublicContent("announcements")
+  const { items: popupEntries } = usePublicContent("event-popup")
+  const hero = heroEntries[0]
+  const announcement = announcementEntries.find((entry) => entry.data.pinned)
+  const popup = popupEntries[0]
+  const fullText = hero?.data.description || "A platform for students to learn, innovate, collaborate and lead through technology and teamwork."
   const [displayedText, setDisplayedText] = useState("")
   const [showPopup, setShowPopup] = useState(false)
   const navigate = useNavigate()
@@ -20,20 +29,20 @@ export default function Hero() {
     }, 40) // Speed of typing in ms
 
     return () => clearInterval(typingInterval)
-  }, [])
+  }, [fullText])
 
   // Auto-trigger the Installation Ceremony popup after 1.5 seconds
   useEffect(() => {
     const popupTimer = setTimeout(() => {
-      setShowPopup(true)
+      setShowPopup(!popup || popup.data.enabled !== false)
     }, 1500)
 
     return () => clearTimeout(popupTimer)
-  }, [])
+  }, [popup])
 
   const handleSelectPopup = () => {
     setShowPopup(false);
-    navigate("/installation-ceremony"); // Match the exact route in App.jsx
+    navigate(popup?.data.url || "/installation-ceremony");
   };
 
   const handleCancelPopup = () => {
@@ -90,45 +99,64 @@ export default function Hero() {
 
       {/* Hero Overlay Content */}
       <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-        
-        {/* Top Department Badge */}
-        <p className="mb-5 text-sm font-semibold uppercase tracking-[0.3em] text-blue-400">
-            Department of <><br/></>Electronics & Telecommunication Engineering
-        </p>
 
-        {/* Hero Title */}
-        <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight text-white mb-6">
-          FEETA <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"> x </span> ISF
+        {/* Top Department Badge in Auron Style */}
+        <span
+          className="section-subtitle mb-4 text-xs sm:text-sm font-bold uppercase tracking-[6px] block"
+        >
+          Department of Electronics & <br /> Telecommunication Engineering
+        </span>
+
+        {/* Hero Title in Cinzel */}
+        <h1
+          className={`font-heading text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-[3px] mb-6 leading-tight transition-colors ${isDark ? "text-white" : "text-[#06152d]"
+            }`}
+        >
+          {!hero || hero.title === "FEETA x ISF" ? <>FEETA <span className="text-gold-gradient">x</span> ISF</> : hero.title}
         </h1>
 
+        {announcement && (
+          <aside className="mx-auto mb-5 max-w-2xl rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] px-4 py-3 text-sm">
+            <strong>{announcement.title}</strong>
+            {announcement.data.description && <span> — {announcement.data.description}</span>}
+          </aside>
+        )}
+
         {/* Subtitle with Typewriter Effect */}
-        <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto mb-10 uppercase tracking-wide min-h-[4rem] sm:min-h-[3rem]">
+        <p
+          className={`text-base sm:text-lg max-w-2xl mx-auto mb-10 tracking-wide min-h-[4rem] sm:min-h-[3rem] transition-colors leading-relaxed ${isDark ? "text-[#abc4e3]" : "text-[#2c3e5a] font-medium"
+            }`}
+        >
           {displayedText}
-          <span className="typewriter-cursor text-cyan-400 font-bold ml-0.5">|</span>
+          <span
+            className="typewriter-cursor font-bold ml-1 text-[var(--color-gold)]"
+          >
+            |
+          </span>
         </p>
 
-        {/* Primary CTA Buttons */}
-        <div className="flex flex-wrap justify-center items-center gap-4 mb-8">
-          
+        {/* Style Primary CTA Buttons */}
+        <div className="flex flex-wrap justify-center items-center gap-4 mb-10">
+
           {/* Primary Action Button */}
           <Link
-            to="/community"
+            to={hero?.data.primaryUrl || "/community"}
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.currentTarget.blur()}
-            className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold text-sm sm:text-base transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.5)] hover:shadow-[0_0_30px_rgba(6,182,212,0.8)] hover:from-blue-500 hover:to-cyan-500 hover:-translate-y-0.5 active:translate-y-0"
+            className="cta-button group"
           >
-            Explore Community
-            <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1"></span>
+            <span>{hero?.data.primaryCta || "Explore Community"}</span>
+            <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
           </Link>
 
           {/* Secondary Action Button */}
           <Link
-            to="/team"
-            className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold text-sm sm:text-base transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.5)] hover:shadow-[0_0_30px_rgba(6,182,212,0.8)] hover:from-blue-500 hover:to-cyan-500 hover:-translate-y-0.5 active:translate-y-0"
+            to={hero?.data.secondaryUrl || "/team"}
+            className="secondary-button group"
           >
-            Meet the Team
-            <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1"></span>
+            <span>{hero?.data.secondaryCta || "Meet the Committee"}</span>
+            <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
           </Link>
         </div>
 
@@ -137,23 +165,35 @@ export default function Hero() {
           {/* FEETA Badge */}
           <Link
             to="/feeta"
-            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-md border border-blue-600/30 bg-blue-950/40 backdrop-blur-md text-sm text-slate-300 shadow-[0_0_15px_rgba(37,99,235,0.15)] transition-all duration-300 hover:border-blue-500/60 hover:bg-blue-950/60 hover:-translate-y-0.5"
+            className={`inline-flex items-center gap-2.5 px-5 py-2 rounded-md border backdrop-blur-md text-sm transition-all duration-300 hover:-translate-y-0.5 ${isDark
+              ? "border-blue-600/30 bg-blue-950/40 text-slate-300 shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:border-blue-500/60 hover:bg-blue-950/60"
+              : "border-blue-200 bg-white/90 text-slate-700 shadow-md shadow-blue-100 hover:border-blue-400 hover:bg-white"
+              }`}
           >
             <span className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6] animate-pulse"></span>
-            <span className="font-semibold text-white">FEETA</span>
-            <span className="text-slate-500">-</span>
-            <span className="text-blue-400 font-medium">STUDENT FORUM</span>
+            <span className={`font-semibold ${isDark ? "text-white" : "text-slate-900"}`}>
+              FEETA
+            </span>
+            <span className={isDark ? "text-slate-500" : "text-slate-400"}>-</span>
+            <span className="text-blue-500 font-medium">STUDENT FORUM</span>
           </Link>
 
           {/* ISF Badge */}
           <Link
             to="/isf"
-            className="inline-flex items-center gap-2.5 px-5 py-2 rounded-md border border-cyan-500/30 bg-cyan-950/40 backdrop-blur-md text-sm text-slate-300 shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all duration-300 hover:border-cyan-400/60 hover:bg-cyan-950/60 hover:-translate-y-0.5"
+            className={`inline-flex items-center gap-2.5 px-5 py-2 rounded-md border backdrop-blur-md text-sm transition-all duration-300 hover:-translate-y-0.5 ${isDark
+              ? "border-cyan-500/30 bg-cyan-950/40 text-slate-300 shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:border-cyan-400/60 hover:bg-cyan-950/60"
+              : "border-cyan-200 bg-white/90 text-slate-700 shadow-md shadow-cyan-100 hover:border-cyan-400 hover:bg-white"
+              }`}
           >
             <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee] animate-pulse"></span>
-            <span className="font-semibold text-white">ISF</span>
-            <span className="text-slate-500">-</span>
-            <span className="text-cyan-400 font-medium">TECHNICAL COMMITEE</span>
+            <span className={`font-semibold ${isDark ? "text-white" : "text-slate-900"}`}>
+              ISF
+            </span>
+            <span className={isDark ? "text-slate-500" : "text-slate-400"}>-</span>
+            <span className={isDark ? "text-cyan-400 font-medium" : "text-cyan-600 font-medium"}>
+              TECHNICAL COMMITEE
+            </span>
           </Link>
         </div>
 
@@ -162,19 +202,27 @@ export default function Hero() {
       {/* Installation Ceremony Modal Popup */}
       {showPopup && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
-          <div className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white p-6 shadow-2xl transition-all border border-slate-100 text-slate-900">
-            
+          <div
+            className={`relative w-full max-w-md overflow-hidden rounded-2xl p-6 shadow-2xl transition-all border ${isDark
+              ? "bg-slate-900 border-slate-700 text-white"
+              : "bg-white border-slate-100 text-slate-900"
+              }`}
+          >
             {/* Close Cross Button */}
             <button
               onClick={handleCancelPopup}
-              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition-colors"
+              className={`absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full transition-colors ${isDark
+                ? "bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white"
+                : "bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800"
+                }`}
               aria-label="Close"
             >
               ✕
             </button>
 
-            {/* FEETA & ISF Logos Side-by-Side */}
-            <div className="mx-auto flex items-center justify-center gap-3 py-2">
+            {popup?.data.image ? (
+              <img src={popup.data.image} alt={popup.data.alt || popup.title} className="max-h-52 w-full rounded-xl object-cover" />
+            ) : <div className="mx-auto flex items-center justify-center gap-3 py-2">
               <img
                 src="/feeta.png"
                 alt="FEETA Logo"
@@ -186,18 +234,24 @@ export default function Hero() {
                 alt="ISF Logo"
                 className="h-10 w-10 object-contain drop-shadow"
               />
-            </div>
+            </div>}
 
             {/* Popup Content */}
             <div className="mt-4 text-center">
-              <span className="text-xs font-semibold uppercase tracking-wider text-blue-600">
-                Featured Event
+              <span className="text-xs font-semibold uppercase tracking-wider text-blue-500">
+                {popup?.data.eyebrow || "Featured Event"}
               </span>
-              <h3 className="mt-1 text-2xl font-bold text-slate-900">
-                Installation Ceremony
+              <h3
+                className={`mt-1 text-2xl font-bold ${isDark ? "text-white" : "text-slate-900"
+                  }`}
+              >
+                {popup?.title || "Installation Ceremony"}
               </h3>
-              <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                Take a look at the official highlights, photos, and memorable moments from our ETC Department Installation Ceremony!
+              <p
+                className={`mt-2 text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-600"
+                  }`}
+              >
+                {popup?.data.description || "Take a look at the official highlights, photos, and memorable moments from our ETC Department Installation Ceremony!"}
               </p>
             </div>
 
@@ -206,17 +260,20 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={handleCancelPopup}
-                className="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+                className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors ${isDark
+                  ? "border-slate-700 text-slate-300 hover:bg-slate-800"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                  }`}
               >
                 Cancel
               </button>
-              
+
               <button
                 type="button"
                 onClick={handleSelectPopup}
                 className="flex-1 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 shadow-md transition-all active:scale-95"
               >
-                View Photos
+                {popup?.data.buttonText || "View Photos"}
               </button>
             </div>
 

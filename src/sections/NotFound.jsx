@@ -1,17 +1,36 @@
 import { Link } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 
 function NotFound() {
+  const { isDark } = useTheme();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-slate-950 px-6 text-center text-white">
-      <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">
+    <main
+      className={`flex min-h-screen flex-col items-center justify-center px-6 text-center transition-colors duration-300 ${
+        isDark ? "bg-[#030712] text-white" : "bg-slate-50 text-slate-900"
+      }`}
+    >
+      <p
+        className={`mb-3 text-sm font-semibold uppercase tracking-[0.3em] transition-colors ${
+          isDark ? "text-cyan-400" : "text-blue-600"
+        }`}
+      >
         Error 404
       </p>
 
-      <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl">
+      <h1
+        className={`text-5xl font-extrabold tracking-tight sm:text-6xl transition-colors ${
+          isDark ? "text-white" : "text-slate-900"
+        }`}
+      >
         Page Not Found
       </h1>
 
-      <p className="mt-6 max-w-md text-base leading-8 text-slate-400">
+      <p
+        className={`mt-6 max-w-md text-base leading-8 transition-colors ${
+          isDark ? "text-slate-400" : "text-slate-600"
+        }`}
+      >
         The page you're looking for doesn't exist or may have been moved.
       </p>
 

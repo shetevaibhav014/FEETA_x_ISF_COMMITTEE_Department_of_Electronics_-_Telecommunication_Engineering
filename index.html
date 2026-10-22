@@ -5,6 +5,32 @@
     <link rel="icon" type="image/svg+xml" href="/forumlogo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FEETA & ISF COMMITTEE - Department of Electronics & Telecommunication Engineering</title>
+    <meta name="description" content="The FEETA and ISF Committee of the Department of Electronics & Telecommunication Engineering." />
+    <meta property="og:title" content="FEETA & ISF COMMITTEE" />
+    <meta property="og:description" content="The FEETA and ISF Committee of the Department of Electronics & Telecommunication Engineering." />
+    <meta property="og:image" content="/etc-logo.png" />
+
+    <!-- Google Fonts: Cinzel (Display & Headings) and Plus Jakarta Sans (Body & UI) from Auron -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Prevent Theme Flash -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('feeta-theme');
+          var theme = saved === 'bright' || saved === 'dark'
+            ? saved
+            : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'bright' : 'dark');
+          document.documentElement.setAttribute('data-theme', theme);
+          document.documentElement.classList.add(theme);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
